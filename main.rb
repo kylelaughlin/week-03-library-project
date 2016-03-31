@@ -24,12 +24,22 @@ def main_menu
 
 end
 
-# The libraries menu which allows users to view, change or create new library locations
+# The libraries menu which allows users to select from:
+#   Show all libraries
+#   Create new library
+#   Back to Main Menue
 def libraries_menu
   puts "\n\n   --- Library Branch Main Menu ---\n\n"
   print "Please select on of the following options:\n\n1.Show all libraries\n2. Back to Main Menu\n\n >>"
   selection = gets.chomp.to_i
   selection = valid_selection(selection, [1,2])
+  case selection
+  when 1
+    libraries_index
+  when 2
+    main_menu
+  else
+    puts "Something broke = Libraries Menu Selection"
 end
 
 # Checks to see if a users selection is within the acceptable choices
