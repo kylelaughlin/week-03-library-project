@@ -13,18 +13,23 @@ require_relative "./lib/staff_member.rb"
 #   patrons
 def main_menu
   puts "\n\n   --- Library Manager Main Menu ---\n\n"
-  print "Please select one of the following options:\n\n1. Library Branches\n\n >>"
+  print "Please select one of the following options:\n\n1. Library Branches\n"\
+        "2. Staff Members\n\n >>"
   selection = gets.chomp.to_i
   #call valid_selection method - (users selection, array of acceptable choices)
-  selection = valid_selection(selection,[1])
+  selection = valid_selection(selection,[1,2])
   case selection
   when 1
     libraries_menu
+  when 2
+    staff_members_menu
   else
     puts "Something broke - Main menu selection"
   end
 
 end
+
+#### LIBRARIES PATH ####################################
 
 # The libraries menu which allows users to select from:
 #   Show all libraries
@@ -66,6 +71,29 @@ def libraries_index
   end
 =end
 end
+
+#### STAFF MEMBERS PATH ##################################
+
+def staff_members_menu
+  puts "\n\n   --- Staff member Main Menu ---\n\n"
+  print "Please select one of the following options:\n\n"\
+        "1.Show all staff members\n"\
+        "2. Back to Main Menu\n\n >>"
+  selection = gets.chomp.to_i
+  selection = valid_selection(selection, [1,2])
+  case selection
+  when 1
+    staff_members_index
+  when 2
+    main_menu
+  else
+    puts "Something broke = Libraries Menu Selection"
+  end
+
+end
+
+
+
 
 # Checks to see if a users selection is within the acceptable choices
 #
