@@ -43,10 +43,11 @@ def libraries_menu
   end
 end
 
+# Displays all the libraries and attributes
+# Can select between selecting a record to view/modify and going back to libraries menu
 def libraries_index
-  puts "need to build this"
+  
 end
-
 
 # Checks to see if a users selection is within the acceptable choices
 #
