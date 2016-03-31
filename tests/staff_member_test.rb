@@ -19,4 +19,15 @@ class StaffMemberTest < Minitest::Test
     refute(sm.valid?, "Should be an invalid object as name can't be blank")
   end
 
+  def test_email_valid
+    sm = StaffMember.new(name: "Kyle", email: "email@Kyle.com")
+    assert(sm.valid?, "Should be a valid object at initialization")
+
+    sm.email = nil
+    refute(sm.valid?, "Should be an invalid object as email can't be nil")
+
+    sm.name = ""
+    refute(sm.valid?, "Should be an invalid object as email can't be blank")
+  end
+
 end
