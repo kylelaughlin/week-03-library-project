@@ -62,18 +62,15 @@ def libraries_index
   Library.all.each do |l|
     puts "#{l.id}. Name: #{l.branch_name}\n   Address: #{l.address}\n   Phone Number: #{l.phone_number}"
   end
-=begin Commented out becuase it is beyon the scope of my initial feature
-  print "\nPlease select one of the following options:\n1. Select a Library\n2. Back to Library Menu\n\n >>"
+
+  print "\nPlease select one of the following options:\n1. Back to Library Menu\n\n >>"
   selection = gets.chomp.to_i
-  selection = valid_selection(selection,[1,2])
+  selection = valid_selection(selection,[1])
   case selection
   when 1
-    print "Please select one of the Libraries listed above.\n >>"
-    library_record(selection)
-  when 2
     libraries_menu
   end
-=end
+
 end
 
 #### STAFF MEMBERS PATH ##################################
@@ -109,6 +106,14 @@ def staff_members_index
   StaffMember.all.each do |sm|
     puts "#{sm.id}. Name: #{sm.name}\n   Email: #{sm.email}"
   end
+
+  print "\nPlease select one of the following options:\n1. Back to Staff Members Menu\n\n >>"
+  selection = gets.chomp.to_i
+  selection = valid_selection(selection,[1])
+  case selection
+  when 1
+    staff_members_menu
+  end
 end
 
 #### BOOKS PATH ####################################
@@ -140,6 +145,14 @@ def books_index
   puts "All Books:"
   Book.all.each do |b|
     puts "#{b.id}. Title: #{b.title}\n   Author: #{b.author}\n   ISBN: #{b.isbn}"
+  end
+
+  print "\nPlease select one of the following options:\n1. Back to Books Menu\n\n >>"
+  selection = gets.chomp.to_i
+  selection = valid_selection(selection,[1])
+  case selection
+  when 1
+    books_menu
   end
 end
 
