@@ -1,3 +1,9 @@
+# Library class represents a library object
+#
+# + branch_name: The name of a specific library location - string
+# + address: The address of a specific library location - string
+# + phone_number: The phone number of a specific library location - string
+#
 
 class Library < ActiveRecord::Base
 
