@@ -168,6 +168,7 @@ end
 #   + Show all patrons
 #   + Back to Main Menu
 #
+
 def patrons_menu
   puts "\n\n   --- Patrons Main Menu ---\n\n"
   print "Please select one of the following options:\n\n"\
