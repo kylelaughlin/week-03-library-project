@@ -24,6 +24,7 @@ def main_menu
 
 end
 
+# The libraries menu which allows users to view, change or create new library locations
 def libraries_menu
   puts "\n\n   --- Library Branch Main Menu ---\n\n"
   print "Please select on of the following options:\n\n1.Show all libraries\n2. Back to Main Menu\n\n >>"
@@ -31,9 +32,13 @@ def libraries_menu
   selection = valid_selection(selection, [1,2])
 end
 
+# Checks to see if a users selection is within the acceptable choices
+#
+# + selection: an integer representing the users selection
+# + acceptable_choices: an array of choices that are valid given the options provided
 def valid_selection(selection, acceptable_choices)
   while !(acceptable_choices.include? selection)
-    print "That is an invalid selection please select an option from above.\n\n>>"
+    print "That is an invalid selection please select an option from above.\n\n >>"
     selection = gets.chomp.to_i
   end
   selection
