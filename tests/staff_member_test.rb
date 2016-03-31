@@ -4,12 +4,12 @@ require_relative '../lib/staff_member.rb'
 class StaffMemberTest < Minitest::Test
 
   def test_create_object_under_normal_circumstances
-    sm = StaffMember.new(name: "Kyle", email: "email@Kyle.com")
+    sm = StaffMember.new(name: "test", email: "email@test.com")
     refute_nil(sm, "Should be an object at initialization")
   end
 
   def test_name_valid
-    sm = StaffMember.new(name: "Kyle", email: "email@Kyle.com")
+    sm = StaffMember.new(name: "test", email: "email@test.com")
     assert(sm.valid?, "Should be a valid object at initialization")
 
     sm.name = nil
@@ -20,7 +20,7 @@ class StaffMemberTest < Minitest::Test
   end
 
   def test_email_valid
-    sm = StaffMember.new(name: "Kyle", email: "email@Kyle.com")
+    sm = StaffMember.new(name: "test", email: "email@test.com")
     assert(sm.valid?, "Should be a valid object at initialization")
 
     sm.email = nil
