@@ -16,10 +16,11 @@ def main_menu
   puts "\n\n   --- Library Manager Main Menu ---\n\n"
   print "Please select one of the following options:\n\n1. Library Branches\n"\
         "2. Staff Members\n"\
-        "3. Books\n\n >>"
+        "3. Books\n"\
+        "4. Patrons\n\n >>"
   selection = gets.chomp.to_i
   #call valid_selection method - (users selection, array of acceptable choices)
-  selection = valid_selection(selection,[1,2,3])
+  selection = valid_selection(selection,[1,2,3,4])
   case selection
   when 1
     libraries_menu
@@ -27,6 +28,8 @@ def main_menu
     staff_members_menu
   when 3
     books_menu
+  when 4
+    patrons_menu
   else
     puts "Something broke - Main menu selection"
   end
@@ -155,6 +158,35 @@ def books_index
     books_menu
   end
 end
+
+
+#### PATRONS PATH ####################################
+
+# Patrons Menu: allows user to select between these options:
+#   + Show all patrons
+#   + Back to Main Menu
+#
+def patrons_menu
+  puts "\n\n   --- Patrons Main Menu ---\n\n"
+  print "Please select one of the following options:\n\n"\
+        "1.Show all patrons\n"\
+        "2. Back to Main Menu\n\n >>"
+  selection = gets.chomp.to_i
+  selection = valid_selection(selection, [1,2])
+
+  case selection
+  when 1
+    patrons_index
+  when 2
+    main_menu
+  else
+    puts "Something broke - Patrons Menu Selection"
+  end
+end
+
+
+
+
 
 # Checks to see if a users selection is within the acceptable choices
 #
