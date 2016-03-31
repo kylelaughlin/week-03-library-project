@@ -14,7 +14,8 @@ require_relative "./lib/staff_member.rb"
 def main_menu
   puts "\n\n   --- Library Manager Main Menu ---\n\n"
   print "Please select one of the following options:\n\n1. Library Branches\n"\
-        "2. Staff Members\n\n >>"
+        "2. Staff Members\n"\
+        "3. Books\n\n >>"
   selection = gets.chomp.to_i
   #call valid_selection method - (users selection, array of acceptable choices)
   selection = valid_selection(selection,[1,2])
@@ -23,6 +24,8 @@ def main_menu
     libraries_menu
   when 2
     staff_members_menu
+  when 3
+    books_menu
   else
     puts "Something broke - Main menu selection"
   end
