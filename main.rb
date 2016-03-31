@@ -4,6 +4,7 @@ require "pry"
 require "yaml"
 require_relative "./lib/library.rb"
 require_relative "./lib/staff_member.rb"
+require_relative "./lib/book.rb"
 
 
 # Main menu for the program. Allows selection of:
@@ -18,7 +19,7 @@ def main_menu
         "3. Books\n\n >>"
   selection = gets.chomp.to_i
   #call valid_selection method - (users selection, array of acceptable choices)
-  selection = valid_selection(selection,[1,2])
+  selection = valid_selection(selection,[1,2,3])
   case selection
   when 1
     libraries_menu
@@ -131,6 +132,14 @@ def books_menu
     main_menu
   else
     puts "Something broke - Books Menu Selection"
+  end
+end
+
+def books_index
+  puts "\n\n   --- Books Index ---\n\n"
+  puts "All Books:"
+  Book.all.each do |b|
+    puts "#{b.id}. Title: #{b.title}\n   Author: #{b.author}\n   ISBN: #{b.isbn}"
   end
 end
 
