@@ -30,7 +30,7 @@ end
 #   Back to Main Menue
 def libraries_menu
   puts "\n\n   --- Library Branch Main Menu ---\n\n"
-  print "Please select on of the following options:\n\n1.Show all libraries\n2. Back to Main Menu\n\n >>"
+  print "Please select one of the following options:\n\n1.Show all libraries\n2. Back to Main Menu\n\n >>"
   selection = gets.chomp.to_i
   selection = valid_selection(selection, [1,2])
   case selection
@@ -46,7 +46,23 @@ end
 # Displays all the libraries and attributes
 # Can select between selecting a record to view/modify and going back to libraries menu
 def libraries_index
-  
+  puts "\n\n   --- Library Branch Index ---\n\n"
+  puts "All Library Locations:"
+  Library.all.each do |l|
+    puts "#{l.id}. Name: #{l.branch_name}\n   Address: #{l.address}\n   Phone Number: #{l.phone_number}"
+  end
+=begin Commented out becuase it is beyon the scope of my initial feature
+  print "\nPlease select one of the following options:\n1. Select a Library\n2. Back to Library Menu\n\n >>"
+  selection = gets.chomp.to_i
+  selection = valid_selection(selection,[1,2])
+  case selection
+  when 1
+    print "Please select one of the Libraries listed above.\n >>"
+    library_record(selection)
+  when 2
+    libraries_menu
+  end
+=end
 end
 
 # Checks to see if a users selection is within the acceptable choices
