@@ -40,7 +40,13 @@ def libraries_menu
     main_menu
   else
     puts "Something broke = Libraries Menu Selection"
+  end
 end
+
+def libraries_index
+  puts "need to build this"
+end
+
 
 # Checks to see if a users selection is within the acceptable choices
 #
