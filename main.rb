@@ -5,7 +5,6 @@ require "yaml"
 require_relative "./lib/library.rb"
 require_relative "./lib/staff_member.rb"
 
-binding.pry
 
 # Main menu for the program. Allows selection of:
 #   library Branches
