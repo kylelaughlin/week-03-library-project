@@ -143,6 +143,8 @@ def books_menu
   end
 end
 
+# Books Index: Shows all books and their infomation
+#
 def books_index
   puts "\n\n   --- Books Index ---\n\n"
   puts "All Books:"
@@ -184,7 +186,23 @@ def patrons_menu
   end
 end
 
+# Patrons Index: Shows all patrons and their infomation
+#
+def patrons_index
+  puts "\n\n   --- Patrons Index ---\n\n"
+  puts "All Patrons:"
+  Book.all.each do |pn|
+    puts "#{pn.id}. Name: #{pn.name}\n   Email: #{pn.email}"
+  end
 
+  print "\nPlease select one of the following options:\n1. Back to Books Menu\n\n >>"
+  selection = gets.chomp.to_i
+  selection = valid_selection(selection,[1])
+  case selection
+  when 1
+    patrons_menu
+  end
+end
 
 
 
@@ -200,7 +218,4 @@ def valid_selection(selection, acceptable_choices)
   selection
 end
 
-
 main_menu
-
-#binding.pry
