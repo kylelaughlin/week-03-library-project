@@ -74,6 +74,10 @@ end
 
 #### STAFF MEMBERS PATH ##################################
 
+# Staff Members Menu: allows user to select between these options:
+#   + Show all staff members
+#   + Back to Main Menu
+#
 def staff_members_menu
   puts "\n\n   --- Staff member Main Menu ---\n\n"
   print "Please select one of the following options:\n\n"\
@@ -81,6 +85,7 @@ def staff_members_menu
         "2. Back to Main Menu\n\n >>"
   selection = gets.chomp.to_i
   selection = valid_selection(selection, [1,2])
+
   case selection
   when 1
     staff_members_index
@@ -92,8 +97,15 @@ def staff_members_menu
 
 end
 
-
-
+# Staff Member Index: Shows all staff members and their infomation
+#
+def staff_members_index
+  puts "\n\n   --- Library Branch Index ---\n\n"
+  puts "All Staff Members:"
+  StaffMember.all.each do |sm|
+    puts "#{sm.id}. Name: #{sm.name}\n   Email: #{sm.email}"
+  end
+end
 
 # Checks to see if a users selection is within the acceptable choices
 #
