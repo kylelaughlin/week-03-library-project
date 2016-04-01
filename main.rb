@@ -122,7 +122,7 @@ def staff_members_menu
         "2. Add new staff member\n"\
         "3. Back to Main Menu\n\n >>"
   selection = gets.chomp.to_i
-  selection = valid_selection(selection, [1,2])
+  selection = valid_selection(selection, [1,2,3])
 
   case selection
   when 1
@@ -212,7 +212,7 @@ def books_menu
         "2. Add new book\n"\
         "3. Back to Main Menu\n\n >>"
   selection = gets.chomp.to_i
-  selection = valid_selection(selection, [1,2])
+  selection = valid_selection(selection, [1,2,3])
 
   case selection
   when 1
@@ -285,7 +285,7 @@ def patrons_menu
         "1.Show all patrons\n"\
         "2. Back to Main Menu\n\n >>"
   selection = gets.chomp.to_i
-  selection = valid_selection(selection, [1,2])
+  selection = valid_selection(selection, [1,2,3])
 
   case selection
   when 1
@@ -294,6 +294,33 @@ def patrons_menu
     main_menu
   else
     puts "Something broke - Patrons Menu Selection"
+  end
+end
+
+def book_new
+  puts "\n\n   --- Add New Book ---\n\n"
+  print "Please fill in all requested information.\n\n"\
+        "What is the title of the book?\n\n >>"
+  title = gets.chomp
+  print "\nWho is the author of the book?\n\n >>"
+  author = gets.chomp
+  print "What is the ISBN of the book?\n\n >>"
+  isbn = gets.chomp
+  save_new_book(title, author, isbn)
+  books_menu
+end
+
+def save_new_book(title, author, isbn)
+  new_book = Book.new(title: title, author: author, isbn: isbn)
+  saved = new_book.save
+  if saved
+    puts "\nBook created:"
+    puts new_book.record_display
+  else
+    puts "\nBook not created!\n"
+    new_book.errors.messages.each do |k,v|
+      puts "#{k} #{v}\n"
+    end
   end
 end
 
