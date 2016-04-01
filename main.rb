@@ -14,6 +14,7 @@ require_relative "./lib/patron.rb"
 #   books
 #   patrons
 def main_menu
+  selection = ""
   while selection != "exit"
     puts "\n\n   --- Library Manager Main Menu ---\n\n"
     print "Please select one of the following options:\n\n1. Library Branches\n"\
@@ -34,7 +35,7 @@ def main_menu
     when "4"
       patrons_menu
     when "exit"
-      puts "Exiting Application"
+      puts "\n\n Closing Application"
     else
       puts "Something broke - Main menu selection"
     end
@@ -42,29 +43,33 @@ def main_menu
 
 end
 
+########################################################
 #### LIBRARIES PATH ####################################
+########################################################
 
 # The libraries menu which allows users to select from:
 #   Show all libraries
 #   Create new library
 #   Back to Main Menue
 def libraries_menu
-
-  puts "\n\n   --- Library Branch Main Menu ---\n\n"
-  print "Please select one of the following options:\n\n"\
-        "1. Show all libraries\n2. Add new library\n"\
-        "3. Back to Main Menu\n\n >>"
-  selection = gets.chomp.to_i
-  selection = valid_selection(selection, [1,2,3])
-  case selection
-  when 1
-    libraries_index
-  when 2
-    library_new
-  when 3
-    main_menu
-  else
-    puts "Something broke = Libraries Menu Selection"
+  selection = ""
+  while selection != "back"
+    puts "\n\n   --- Library Branch Main Menu ---\n\n"
+    print "Please select one of the following options:\n\n"\
+          "1. Show all libraries\n2. Add new library\n"\
+          "Back. Go back to Main Menu\n\n >>"
+    selection = gets.chomp.downcase
+    selection = valid_selection(selection, ["1","2","back"])
+    case selection
+    when "1"
+      libraries_index
+    when "2"
+      library_new
+    when "back"
+      #Go back to main menu
+    else
+      puts "Something broke = Libraries Menu Selection"
+    end
   end
 end
 
@@ -80,7 +85,6 @@ def library_new
   print "\nWhat is the phone number of the new library?\n\n >>"
   phone_number = gets.chomp
   save_new_library(branch_name, address, phone_number)
-  libraries_menu
 end
 
 # Saves the new library and validates it
@@ -109,27 +113,30 @@ end
 # Displays all the libraries and attributes
 # Can select between selecting a record to view/modify and going back to libraries menu
 def libraries_index
-  puts "\n\n   --- Library Branch Index ---\n\n"
-  puts "All Library Locations:"
-  Library.all.each do |l|
-    puts l.record_display
-  end
-
-  print "\nPlease select one of the following options:\n1. Select a library\n"\
-        "2. Back to Library Menu\n\n >>"
-  selection = gets.chomp.to_i
-  selection = valid_selection(selection,[1])
-  case selection
-  when 1
-    print "\nPlease select a library from above.\n\n >>"
-    selected_library_id = gets.chomp.to_i
-    while Library.find_by_id(selected_library_id).nil?
-      print "That is not a valid selection. Please select from the libraries above.\n\n >>"
-      selected_library_id = gets.chomp.to_i
+  selection = ""
+  while selection != "back"
+    puts "\n\n   --- Library Branch Index ---\n\n"
+    puts "All Library Locations:"
+    Library.all.each do |l|
+      puts l.record_display
     end
-    selected_library_record(Library.find_by_id(selected_library_id))
-  when 2
-    libraries_menu
+
+    print "\nPlease select one of the following options:\n1. Select a library\n"\
+          "Back. Go back to Library Menu\n\n >>"
+    selection = gets.chomp
+    selection = valid_selection(selection,["1","back"])
+    case selection
+    when "1"
+      print "\nPlease select a library from above.\n\n >>"
+      selected_library_id = gets.chomp.to_i
+      while Library.find_by_id(selected_library_id).nil?
+        print "That is not a valid selection. Please select from the libraries above.\n\n >>"
+        selected_library_id = gets.chomp.to_i
+      end
+      selected_library_record(Library.find_by_id(selected_library_id))
+    when "back"
+      #back to the libraries menu
+    end
   end
 end
 
@@ -139,19 +146,22 @@ end
 #
 # Returns nil
 def selected_library_record(selected_library)
-  puts "\n\n   --- #{selected_library.branch_name} ---\n\n"
-  puts selected_library.record_display
-  print "\nPlease select one of the following:\n\n1. Edit Record\n"\
-        "2. Back to Show all libraries\n\n >>"
-  selection = gets.chomp.to_i
-  selection = valid_selection(selection, [1,2])
-  case selection
-  when 1
-    edit_library_record(selected_library)
-  when 2
-    libraries_index
-  else
-    puts "Something broke - selected library record selection"
+  selection = ""
+  while selection != "back"
+    puts "\n\n   --- #{selected_library.branch_name} ---\n\n"
+    puts selected_library.record_display
+    print "\nPlease select one of the following:\n\n1. Edit Record\n"\
+          "Back. Go back to Show all libraries\n\n >>"
+    selection = gets.chomp.downcase
+    selection = valid_selection(selection, ["1","back"])
+    case selection
+    when "1"
+      edit_library_record(selected_library)
+    when "back"
+      #go back to libraries index
+    else
+      puts "Something broke - selected library record selection"
+    end
   end
 end
 
@@ -237,30 +247,35 @@ def library_updated(saved, selected_library)
   end
 end
 
+##########################################################
 #### STAFF MEMBERS PATH ##################################
+##########################################################
 
 # Staff Members Menu: allows user to select between these options:
 #   + Show all staff members
 #   + Back to Main Menu
 #
 def staff_members_menu
-  puts "\n\n   --- Staff Member Main Menu ---\n\n"
-  print "Please select one of the following options:\n\n"\
-        "1. Show all staff members\n"\
-        "2. Add new staff member\n"\
-        "3. Back to Main Menu\n\n >>"
-  selection = gets.chomp.to_i
-  selection = valid_selection(selection, [1,2,3])
+  selection = ""
+  while selection != "back"
+    puts "\n\n   --- Staff Member Main Menu ---\n\n"
+    print "Please select one of the following options:\n\n"\
+          "1. Show all staff members\n"\
+          "2. Add new staff member\n"\
+          "Back. Go back to Main Menu\n\n >>"
+    selection = gets.chomp.downcase
+    selection = valid_selection(selection, ["1","2","back"])
 
-  case selection
-  when 1
-    staff_members_index
-  when 2
-    staff_member_new
-  when 3
-    main_menu
-  else
-    puts "Something broke - Staff Member Menu Selection"
+    case selection
+    when "1"
+      staff_members_index
+    when "2"
+      staff_member_new
+    when "back"
+      #goes back to main menu
+    else
+      puts "Something broke - Staff Member Menu Selection"
+    end
   end
 end
 
@@ -275,8 +290,7 @@ def staff_member_new
   name = gets.chomp
   print "\nWhat is the new staff member's email?\n\n >>"
   email = gets.chomp
-  new_staff_member = save_new_staff_member(name, email)
-  staff_members_menu
+  save_new_staff_member(name, email)
 end
 
 # Saves record to table if valid, if not show errors
@@ -298,7 +312,6 @@ def save_new_staff_member(name, email)
       puts "#{k} #{v}\n"
     end
   end
-  new_staff_member
 end
 
 # Assign a new staff member to a home library
@@ -319,49 +332,55 @@ def assign_to_library(new_staff_member)
   end
   new_staff_member.library = Library.find_by_id(selection)
   puts "\n#{new_staff_member.name} is now assigned to #{new_staff_member.library.branch_name}"
-  staff_members_menu
 end
 
 # Staff Member Index: Shows all staff members and their infomation to select
 #
 def staff_members_index
-  puts "\n\n   --- Library Branch Index ---\n\n"
-  puts "All Staff Members:"
-  StaffMember.all.each do |sm|
-    puts sm.record_display
-  end
+  selection = ""
+  while selection != "back"
+    puts "\n\n   --- Library Branch Index ---\n\n"
+    puts "All Staff Members:"
+    StaffMember.all.each do |sm|
+      puts sm.record_display
+    end
 
-  print "\nPlease select one of the following options:\n1. Back to Staff Members Menu\n\n >>"
-  selection = gets.chomp.to_i
-  selection = valid_selection(selection,[1])
-  case selection
-  when 1
-    staff_members_menu
+    print "\nPlease select one of the following options:\nBack. Go back to Staff Members Menu\n\n >>"
+    selection = gets.chomp.downcase
+    selection = valid_selection(selection,["back"])
+    case selection
+    when "back"
+      #go back to staff members menu
+    end
   end
 end
 
+####################################################
 #### BOOKS PATH ####################################
+####################################################
 
 # Books Menu: allows user to select between these options:
 #   + Show all books
 #   + Back to Main Menu
 #
 def books_menu
+  selection = ""
+  while != "back"
   puts "\n\n   --- Books Main Menu ---\n\n"
   print "Please select one of the following options:\n\n"\
         "1.Show all books\n"\
         "2. Add new book\n"\
-        "3. Back to Main Menu\n\n >>"
+        "Back. Go back to Main Menu\n\n >>"
   selection = gets.chomp.to_i
-  selection = valid_selection(selection, [1,2,3])
+  selection = valid_selection(selection, ["1","2","back"])
 
   case selection
-  when 1
+  when "1"
     books_index
-  when 2
+  when "2"
     book_new
-  when 3
-    main_menu
+  when "back"
+    #Go back to main menu
   else
     puts "Something broke - Books Menu Selection"
   end
@@ -380,7 +399,6 @@ def book_new
   print "What is the ISBN of the book?\n\n >>"
   isbn = gets.chomp
   save_new_book(title, author, isbn)
-  books_menu
 end
 
 # Saves new book record, if valid. if not valid shows errorrs
