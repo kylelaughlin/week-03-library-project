@@ -129,7 +129,7 @@ def libraries_index
     when "1"
       print "\nPlease select a library from above.\n\n >>"
       selected_library_id = gets.chomp.to_i
-      selected_library = valid_library(selected_library)
+      selected_library_id = valid_library(selected_library_id)
       selected_library_record(Library.find_by_id(selected_library_id))
     when "back"
       #back to the libraries menu
@@ -348,10 +348,58 @@ def staff_members_index
     selection = valid_selection(selection,["1","back"])
     case selection
     when "1"
-      selected_staff_member_record
+      print "\nPlease select a staff member from above.\n\n >>"
+      selected_staff_member_id = gets.chomp.to_i
+      selected_staff_member_id = valid_staff_member(selected_staff_member_id)
+      selected_staff_member_record(StaffMember.find_by_id(selected_staff_member_id))
     when "back"
       #go back to staff members menu
     end
+  end
+end
+
+def selected_staff_member_record(selected_staff_member)
+  selection = ""
+  while selection != "back"
+    puts "\n\n   --- #{selected_staff_member.name} ---\n\n"
+    puts selected_staff_member.record_display
+    print "\nPlease select one of the following:\n\n1. Edit Record\n"\
+    "Back. Go back to Show all libraries\n\n >>"
+    selection = gets.chomp.downcase
+    selection = valid_selection(selection, ["1","back"])
+    case selection
+    when "1"
+      edit_staff_member_record(selected_staff_member)
+    when "back"
+      #go back to staff members index
+    else
+      puts "Something broke - selected staff member record selection"
+    end
+  end
+end
+
+# Select which staff member attribute to change
+#
+# + selected_staff_member: a StaffMember object which was selected by the user
+#
+# Returns nil
+def edit_staff_member_record(selected_staff_member)
+  puts "\n\n   --- Edit #{selected_staff_member.name} ---\n\n"
+  print "What would you like to edit?\n"
+  print "#{selected_staff_member.record_edit_display}\n4. Back to Selected Library\n >>"
+  selection = gets.chomp.to_i
+  selection = valid_selection(selection, [1,2,3,4])
+  case selection
+  when 1
+    edit_library_branch_name(selected_library)
+  when 2
+    edit_library_address(selected_library)
+  when 3
+    edit_library_phone_number(selected_library)
+  when 4
+    selected_library_record(selected_library)
+  else
+    puts "Something broke - Library edit record selection"
   end
 end
 
@@ -564,12 +612,20 @@ def valid_selection(selection, acceptable_choices)
   selection
 end
 
-def valid_library(selected_library)
+def valid_library(selected_library_id)
   while Library.find_by_id(selected_library_id).nil?
     print "That is not a valid selection. Please select from the libraries above.\n\n >>"
     selected_library_id = gets.chomp.to_i
   end
-  selected_library
+  selected_library_id
+end
+
+def valid_staff_member(selected_staff_member_id)
+  while StaffMember.find_by_id(selected_staff_member.id).nil?
+    print "That is not a valid selection. Please select from the staff members above.\n\n >>"
+    selected_staff_member_id = gets.chomp.to_i
+  end
+  selected_staff_member_id
 end
 
 binding.pry

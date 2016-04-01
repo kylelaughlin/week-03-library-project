@@ -17,4 +17,12 @@ class StaffMember < ActiveRecord::Base
     "#{id}. Name: #{name}\n   Email: #{email}"
   end
 
+  # Creates a string representing a Staff Member's attributes to be selected from
+  #
+  # Returns the created string
+  def record_edit_display
+    "1. Name: #{name}\n"\
+    "2. Email: #{email}"
+  end
+
 end
