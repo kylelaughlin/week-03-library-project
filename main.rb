@@ -713,6 +713,12 @@ def select_patron_to_check_out(selected_book)
   end
 end
 
+def check_out_book(patron, selected_book)
+  patron.books_checked_out_count += 1
+  selected_book.patron = patron_new
+  puts "#{selected_book.title} is now checked out by #{patron.name}"
+end
+
 
 
 ######################################################
