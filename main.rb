@@ -54,7 +54,7 @@ def libraries_menu
   when 1
     libraries_index
   when 2
-    librariy_new
+    library_new
   when 3
     main_menu
   else
@@ -78,7 +78,35 @@ def libraries_index
   when 1
     libraries_menu
   end
+end
 
+def library_new
+  puts "\n\n   --- Add New Library ---\n\n"
+  print "Please fill in all requested information.\n\nWhat is the name of the new library?\n"\
+       "\n >>"
+  branch_name = gets.chomp
+  print "\nWhat is the address of the new library?\n\n >>"
+  address = gets.chomp
+  print "\nWhat is the phone number of the new library?\n\n >>"
+  phone_number = gets.chomp
+  save_new_library(branch_name, address, phone_number)
+  libraries_menu
+end
+
+def save_new_library(branch_name, address, phone_number)
+  new_library = Library.new(branch_name: branch_name,
+                            address: address,
+                            phone_number: phone_number)
+  saved = new_library.save
+  if saved
+    puts "\nLibrary Created:"
+    puts new_library.library_display
+  else
+    puts "\nLibrary not created\n"
+    new_library.errors.messages.each do |k,v|
+      puts "#{k} #{v}\n"
+    end
+  end
 end
 
 #### STAFF MEMBERS PATH ##################################
