@@ -118,8 +118,9 @@ end
 def staff_members_menu
   puts "\n\n   --- Staff Member Main Menu ---\n\n"
   print "Please select one of the following options:\n\n"\
-        "1.Show all staff members\n"\
-        "2. Back to Main Menu\n\n >>"
+        "1. Show all staff members\n"\
+        "2. Add new staff member\n"\
+        "3. Back to Main Menu\n\n >>"
   selection = gets.chomp.to_i
   selection = valid_selection(selection, [1,2])
 
@@ -127,11 +128,39 @@ def staff_members_menu
   when 1
     staff_members_index
   when 2
+    staff_member_new
+  when 3
     main_menu
   else
     puts "Something broke - Staff Member Menu Selection"
   end
 
+end
+
+def staff_member_new
+  puts "\n\n   --- Add New Staff Member ---\n\n"
+  print "Please fill in all requested information.\n\n"\
+        "What is the new staff member's name?\n"\
+       "\n >>"
+  name = gets.chomp
+  print "\nWhat is the new staff member's email?\n\n >>"
+  email = gets.chomp
+  save_new_staff_member(name, email)
+  staff_members_menu
+end
+
+def save_new_staff_member(name, email)
+  new_staff_member = StaffMember.new(name: name, email: email)
+  saved = new_staff_member.save
+  if saved
+    puts "\nStaff member created:"
+    puts new_staff_member.record_display
+  else
+    puts "\nStaff member not created.\n"
+    new_staff_member.errors.messages.each do |k,v|
+      puts "#{k} #{v}\n"
+    end
+  end
 end
 
 # Staff Member Index: Shows all staff members and their infomation
