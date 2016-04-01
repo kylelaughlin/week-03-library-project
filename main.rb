@@ -258,7 +258,9 @@ def staff_members_menu
   end
 end
 
-
+# Gather for new staff member info
+#
+# Calls new_staff_member to save and validate record
 def staff_member_new
   puts "\n\n   --- Add New Staff Member ---\n\n"
   print "Please fill in all requested information.\n\n"\
@@ -271,6 +273,12 @@ def staff_member_new
   staff_members_menu
 end
 
+# Saves record to table if valid, if not show errors
+#
+# + name: a string representing the new staff members name
+# + email: a string representing the new staff memners email
+#
+#
 def save_new_staff_member(name, email)
   new_staff_member = StaffMember.new(name: name, email: email)
   saved = new_staff_member.save
@@ -287,6 +295,11 @@ def save_new_staff_member(name, email)
   new_staff_member
 end
 
+# Assign a new staff member to a home library
+#
+# +new_staff_member: a staff member object
+#
+#
 def assign_to_library(new_staff_member)
   puts "\nPlease select one of the following libraries for the new staff member:"
   Library.all.each do |l|
@@ -303,7 +316,7 @@ def assign_to_library(new_staff_member)
   staff_members_menu
 end
 
-# Staff Member Index: Shows all staff members and their infomation
+# Staff Member Index: Shows all staff members and their infomation to select
 #
 def staff_members_index
   puts "\n\n   --- Library Branch Index ---\n\n"
@@ -348,6 +361,9 @@ def books_menu
   end
 end
 
+# Gathers info for a new book record
+#
+# Calls save_new_book method to save and validate new book record
 def book_new
   puts "\n\n   --- Add New Book ---\n\n"
   print "Please fill in all requested information.\n\n"\
@@ -361,13 +377,20 @@ def book_new
   books_menu
 end
 
+# Saves new book record, if valid. if not valid shows errorrs
+#
+# + title: string representing the title of the new book
+# + author: string representing the author of the new book
+# + isbn: string representing the ISBN number of the new book
+#
+# Returns nil
 def save_new_book(title, author, isbn)
   new_book = Book.new(title: title, author: author, isbn: isbn)
   saved = new_book.save
   if saved
     puts "\nBook created:"
     puts new_book.record_display
-    assign_to_book_library(new_book)
+    assign_book_to_library(book)
   else
     puts "\nBook not created!\n"
     new_book.errors.messages.each do |k,v|
@@ -376,7 +399,12 @@ def save_new_book(title, author, isbn)
   end
 end
 
-def assign_to_book_library(new_book)
+# Assigns a book to a library
+#
+# + book: a book object
+#
+# Calls back to books_menu
+def assign_book_to_library(book)
   puts "\nPlease select one of the following libraries for the new book:"
   Library.all.each do |l|
     puts l.record_display
@@ -387,12 +415,12 @@ def assign_to_book_library(new_book)
     print "That is not a valid selection. Please select from the libraries above.\n\n >>"
     selection = gets.chomp.to_i
   end
-  new_staff_member.library = Library.find_by_id(selection)
-  puts "\n#{new_book.title} is now assigned to #{new_book.library.branch_name}"
+  book.library = Library.find_by_id(selection)
+  puts "\n#{book.title} is now assigned to #{book.library.branch_name}"
   books_menu
 end
 
-# Books Index: Shows all books and their infomation
+# Books Index: Shows all books and their infomation select an option
 #
 def books_index
   puts "\n\n   --- Books Index ---\n\n"
@@ -417,7 +445,6 @@ end
 #   + Show all patrons
 #   + Back to Main Menu
 #
-
 def patrons_menu
   puts "\n\n   --- Patrons Main Menu ---\n\n"
   print "Please select one of the following options:\n\n"\
@@ -439,6 +466,9 @@ def patrons_menu
   end
 end
 
+# Gather information for a new patron record
+#
+# Calls save_new_patron to save a validate record
 def patron_new
   puts "\n\n   --- Add New Patron ---\n\n"
   print "Please fill in all requested information.\n\n"\
@@ -450,6 +480,11 @@ def patron_new
   patrons_menu
 end
 
+# Save and validate the record, don't save and show errors if invalid record
+#
+# + name: string representing the name of the new patron
+# + email: string representing the email of the new patron
+#
 def save_new_patron(name, email)
   new_patron = Patron.new(name: name, email: email)
   saved = new_patron.save
@@ -464,7 +499,7 @@ def save_new_patron(name, email)
   end
 end
 
-# Patrons Index: Shows all patrons and their infomation
+# Patrons Index: Shows all patrons and their infomation Select option
 #
 def patrons_index
   puts "\n\n   --- Patrons Index ---\n\n"
