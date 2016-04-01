@@ -582,7 +582,7 @@ def selected_book_record(selected_book)
     puts "\n\n   --- #{selected_book.title} ---\n\n"
     puts selected_book.record_display
     print "\nPlease select one of the following:\n\n1. Edit Record\n"\
-          "2. Check in/out"
+          "2. Check in/out\n"\
           "Back. Go back to Show all libraries\n\n >>"
     selection = gets.chomp.downcase
     selection = valid_selection(selection, ["1","2","back"])
@@ -697,8 +697,9 @@ def check_in_out_book(selected_book)
 end
 
 def select_patron_to_check_out(selected_book)
+  puts "\n\n   --- Checkout #{selected_book.title} ---\n\n"
   puts "Patrons:\n\n"
-  Patrons.all.each do |patron|
+  Patron.all.each do |patron|
     puts patron.record_display
   end
   print "\nPlease select a patron above to check out this book\n\n >>"
@@ -715,8 +716,23 @@ end
 
 def check_out_book(patron, selected_book)
   patron.books_checked_out_count += 1
-  selected_book.patron = patron_new
-  puts "#{selected_book.title} is now checked out by #{patron.name}"
+  selected_book.patron = patron
+  puts "\n\n#{selected_book.title} is now checked out by #{patron.name}"
+end
+
+def check_in_book_patron(selected_book)
+  patron = Patron.find_by_id(selected_book.patron_id)
+  print "#{patron.name} has '#{selected_book.title}' checked out.\n\n"\
+       "Would you like to check it back in? (Y\\N)\n\n >>"
+  selection = gets.chomp.downcase
+  selection.valid_selection(selection,["y","yes","n","no"])
+  if selection == "y" || selection == "yes"
+    patron.books_checked_out_count -= 1
+    selected_book.patron_id = nil
+    puts "#{selected_book.title} has been checked in."
+  else
+    #Go back to selected_book_record
+  end
 end
 
 
