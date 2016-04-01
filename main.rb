@@ -62,24 +62,6 @@ def libraries_menu
   end
 end
 
-# Displays all the libraries and attributes
-# Can select between selecting a record to view/modify and going back to libraries menu
-def libraries_index
-  puts "\n\n   --- Library Branch Index ---\n\n"
-  puts "All Library Locations:"
-  Library.all.each do |l|
-    puts l.record_display
-  end
-
-  print "\nPlease select one of the following options:\n1. Back to Library Menu\n\n >>"
-  selection = gets.chomp.to_i
-  selection = valid_selection(selection,[1])
-  case selection
-  when 1
-    libraries_menu
-  end
-end
-
 def library_new
   puts "\n\n   --- Add New Library ---\n\n"
   print "Please fill in all requested information.\n\nWhat is the name of the new library?\n"\
@@ -106,6 +88,48 @@ def save_new_library(branch_name, address, phone_number)
     new_library.errors.messages.each do |k,v|
       puts "#{k} #{v}\n"
     end
+  end
+end
+
+# Displays all the libraries and attributes
+# Can select between selecting a record to view/modify and going back to libraries menu
+def libraries_index
+  puts "\n\n   --- Library Branch Index ---\n\n"
+  puts "All Library Locations:"
+  Library.all.each do |l|
+    puts l.record_display
+  end
+
+  print "\nPlease select one of the following options:\n1. Select a library\n"\
+        "2. Back to Library Menu\n\n >>"
+  selection = gets.chomp.to_i
+  selection = valid_selection(selection,[1])
+  case selection
+  when 1
+    print "\nPlease select a library from above.\n\n >>"
+    selected_library_id = gets.chomp.to_i
+    while Library.find_by_id(selected_library_id).nil?
+      print "That is not a valid selection. Please select from the libraries above.\n\n >>"
+      selected_library_id = gets.chomp.to_i
+    end
+    selected_library_record(Library.find_by_id(selected_library_id))
+  when 2
+    libraries_menu
+  end
+end
+
+def selected_library_record(selected_library)
+  puts "\n\n   --- #{selected_library.branch_name} ---\n\n"
+  puts selected_library.record_display
+  print "\nPlease select one of the following:\n\n1. Edit Record\n"\
+       "2. Back to Show all libraries\n\n >>"
+  selection = gets.chomp.to_i
+  selection = valid_selection(selection, [1,2,3])
+  case selection
+  when 1
+    edit_library_record(selected_library)
+  when 2
+    libraries_index
   end
 end
 
