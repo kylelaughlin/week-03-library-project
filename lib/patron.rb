@@ -9,4 +9,11 @@ class Patron < ActiveRecord::Base
 
   has_many :books
 
+  # Creates a string representing a books attributes
+  #
+  # Returns the created string
+  def record_display
+    string = "#{pn.id}. Name: #{pn.name}\n   Email: #{pn.email}"
+  end
+
 end

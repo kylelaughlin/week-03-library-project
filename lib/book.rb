@@ -8,4 +8,11 @@ class Book < ActiveRecord::Base
   belongs_to :library
   belongs_to :patron
 
+  # Creates a string representing a books attributes
+  #
+  # Returns the created string
+  def record_display
+    string = "#{id}. Title: #{title}\n   Author: #{author}\n   ISBN: #{isbn}"
+  end
+
 end

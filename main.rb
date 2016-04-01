@@ -140,7 +140,7 @@ def staff_members_index
   puts "\n\n   --- Library Branch Index ---\n\n"
   puts "All Staff Members:"
   StaffMember.all.each do |sm|
-    puts "#{sm.id}. Name: #{sm.name}\n   Email: #{sm.email}"
+    puts sm.record_display
   end
 
   print "\nPlease select one of the following options:\n1. Back to Staff Members Menu\n\n >>"
@@ -182,7 +182,7 @@ def books_index
   puts "\n\n   --- Books Index ---\n\n"
   puts "All Books:"
   Book.all.each do |b|
-    puts "#{b.id}. Title: #{b.title}\n   Author: #{b.author}\n   ISBN: #{b.isbn}"
+    puts b.record_display
   end
 
   print "\nPlease select one of the following options:\n1. Back to Books Menu\n\n >>"
@@ -225,8 +225,8 @@ end
 def patrons_index
   puts "\n\n   --- Patrons Index ---\n\n"
   puts "All Patrons:"
-  Book.all.each do |pn|
-    puts "#{pn.id}. Name: #{pn.name}\n   Email: #{pn.email}"
+  Patron.all.each do |pn|
+    puts pn.record_display
   end
 
   print "\nPlease select one of the following options:\n1. Back to Books Menu\n\n >>"

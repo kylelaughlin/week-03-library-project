@@ -10,4 +10,11 @@ class StaffMember < ActiveRecord::Base
 
   belongs_to :library
 
+  # Creates a string representing a Staff Members attributes
+  #
+  # Returns the created string
+  def record_display
+    string = "#{id}. Name: #{name}\n   Email: #{email}"
+  end
+
 end
