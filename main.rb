@@ -816,10 +816,15 @@ def patrons_index
       puts pn.record_display
     end
 
-    print "\nPlease select one of the following options:\nBack. Go back to Books Menu\n\n >>"
-    selection = gets.chomp.to_i
-    selection = valid_selection(selection,["back"])
+    print "\nPlease select one of the following options:\n1. Select a patron\nBack. Go back to Books Menu\n\n >>"
+    selection = gets.chomp.downcase
+    selection = valid_selection(selection,["1","back"])
     case selection
+    when "1"
+      print "\nPlease select a patron from above.\n\n >>"
+      selected_patron_id = gets.chomp.to_i
+      selected_patron_id = valid_patron(selected_patron_id)
+      selected_patron_record(Patron.find_by_id(selected_patron_id))
     when "back"
       # go back to patrons menu
     end
