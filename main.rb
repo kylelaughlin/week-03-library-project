@@ -441,24 +441,26 @@ def assign_book_to_library(book)
   end
   book.library = Library.find_by_id(selection)
   puts "\n#{book.title} is now assigned to #{book.library.branch_name}"
-  books_menu
 end
 
 # Books Index: Shows all books and their infomation select an option
 #
 def books_index
-  puts "\n\n   --- Books Index ---\n\n"
-  puts "All Books:"
-  Book.all.each do |b|
-    puts b.record_display
-  end
+  selection = ""
+  while selectino != "back"
+    puts "\n\n   --- Books Index ---\n\n"
+    puts "All Books:"
+    Book.all.each do |b|
+      puts b.record_display
+    end
 
-  print "\nPlease select one of the following options:\n1. Back to Books Menu\n\n >>"
-  selection = gets.chomp.to_i
-  selection = valid_selection(selection,[1])
-  case selection
-  when 1
-    books_menu
+    print "\nPlease select one of the following options:\nBack. Go back to Books Menu\n\n >>"
+    selection = gets.chomp.downcase
+    selection = valid_selection(selection,["back"])
+    case selection
+    when "back"
+      #go back to books menu
+    end
   end
 end
 
