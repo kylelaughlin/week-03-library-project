@@ -168,22 +168,25 @@ end
 #
 # Returns nil
 def edit_library_record(selected_library)
-  puts "\n\n   --- Edit #{selected_library.branch_name} ---\n\n"
-  print "What would you like to edit?\n"
-  print "#{selected_library.record_edit_display}\n4. Back to Selected Library\n >>"
-  selection = gets.chomp.to_i
-  selection = valid_selection(selection, [1,2,3,4])
-  case selection
-  when 1
-    edit_library_branch_name(selected_library)
-  when 2
-    edit_library_address(selected_library)
-  when 3
-    edit_library_phone_number(selected_library)
-  when 4
-    selected_library_record(selected_library)
-  else
-    puts "Something broke - Library edit record selection"
+  selection = ""
+  while selection != "back"
+    puts "\n\n   --- Edit #{selected_library.branch_name} ---\n\n"
+    print "What would you like to edit?\n"
+    print "#{selected_library.record_edit_display}\nBack. Go back to Selected Library\n >>"
+    selection = gets.chomp.downcase
+    selection = valid_selection(selection, ["1","2","3","back"])
+    case selection
+    when "1"
+      edit_library_branch_name(selected_library)
+    when "2"
+      edit_library_address(selected_library)
+    when "3"
+      edit_library_phone_number(selected_library)
+    when "back"
+      #back to selected library record
+    else
+      puts "Something broke - Library edit record selection"
+    end
   end
 end
 
@@ -197,7 +200,6 @@ def edit_library_branch_name(selected_library)
   branch_name = gets.chomp
   saved = selected_library.update_attributes(branch_name: branch_name)
   library_updated(saved, selected_library)
-  edit_library_record(selected_library)
 end
 
 # Change the library address
@@ -210,7 +212,6 @@ def edit_library_address(selected_library)
   address = gets.chomp
   saved = selected_library.update_attributes(address: address)
   library_updated(saved, selected_library)
-  edit_library_record(selected_library)
 end
 
 # Change the library phone_number
@@ -223,7 +224,6 @@ def edit_library_phone_number(selected_library)
   phone_number = gets.chomp
   saved = selected_library.update_attributes(phone_number: phone_number)
   library_updated(saved, selected_library)
-  edit_library_record(selected_library)
 end
 
 # Checks if save is true or false, if false show errors with record
@@ -384,25 +384,67 @@ end
 #
 # Returns nil
 def edit_staff_member_record(selected_staff_member)
-  puts "\n\n   --- Edit #{selected_staff_member.name} ---\n\n"
-  print "What would you like to edit?\n"
-  print "#{selected_staff_member.record_edit_display}\n4. Back to Selected Library\n >>"
-  selection = gets.chomp.to_i
-  selection = valid_selection(selection, [1,2,3,4])
-  case selection
-  when 1
-    edit_library_branch_name(selected_library)
-  when 2
-    edit_library_address(selected_library)
-  when 3
-    edit_library_phone_number(selected_library)
-  when 4
-    selected_library_record(selected_library)
-  else
-    puts "Something broke - Library edit record selection"
+  selection = ""
+  while selection != "back"
+    puts "\n\n   --- Edit #{selected_staff_member.name} ---\n\n"
+    print "What would you like to edit?\n"
+    print "#{selected_staff_member.record_edit_display}\nBack. Go back to Selected Staff Member\n >>"
+    selection = gets.chomp.downcase
+    selection = valid_selection(selection, ["1","2","back"])
+    case selection
+    when "1"
+      edit_staff_member_name(selected_staff_member)
+    when "2"
+      edit_staff_member_email(selected_staff_member)
+    when "back"
+      #go back to selected_library_record
+    else
+      puts "Something broke - Library edit record selection"
+    end
   end
 end
 
+# Change the staff member name
+#
+# + selected_staff_member: a StaffMember object which was selected by the user
+#
+#
+def edit_staff_member_name(selected_staff_member)
+  print "New name: >>"
+  name = gets.chomp
+  saved = selected_staff_member.update_attributes(name: name)
+  staff_member_updated(saved, selected_staff_member)
+end
+
+# Change the staff member name
+#
+# + selected_staff_member: a StaffMember object which was selected by the user
+#
+#
+def edit_staff_member_email(selected_staff_member)
+  print "New name: >>"
+  email = gets.chomp
+  saved = selected_staff_member.update_attributes(email: email)
+  staff_member_updated(saved, selected_staff_member)
+end
+
+# Checks if save is true or false, if false show errors with record
+#
+# + saved: a boolean representing whether the record saved to database or not
+# + selected_staff_member: a StaffMember object which was selected by the user
+#
+#
+def staff_member_updated(saved, selected_staff_member)
+  if saved
+    puts "\nStaff Member Updated:"
+    puts selected_staff_member.record_display
+  else
+    puts "\nStaff member not updated!\n"
+    selected_staff_member.errors.messages.each do |k,v|
+      puts "#{k} #{v}\n"
+    end
+  end
+end
 ####################################################
 #### BOOKS PATH ####################################
 ####################################################
