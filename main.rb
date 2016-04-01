@@ -690,13 +690,13 @@ end
 # Returns nil
 def check_in_out_book(selected_book)
   if selected_book.patron_id.nil?
-    check_out_book(selected_book)
+    select_patron_to_check_out(selected_book)
   else
     check_in_book(selected_book)
   end
 end
 
-def check_out_book(selected_book)
+def select_patron_to_check_out(selected_book)
   puts "Patrons:\n\n"
   Patrons.all.each do |patron|
     puts patron.record_display
@@ -704,7 +704,13 @@ def check_out_book(selected_book)
   print "\nPlease select a patron above to check out this book\n\n >>"
   selected_patron_id = gets.chomp.to_i
   selected_patron_id = valid_patron(selected_patron_id)
-
+  patron = Patron.find_by_id(selected_patron_id)
+  if patron.books_checked_out_count < 3
+    check_out_book(patron,selected_book)
+  else
+    puts "\n#{patron.name} has three books already checked out.\n"\
+         "Must return a book before checking out another."
+  end
 end
 
 
