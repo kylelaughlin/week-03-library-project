@@ -30,4 +30,12 @@ class StaffMemberTest < Minitest::Test
     refute(sm.valid?, "Should be an invalid object as email can't be blank")
   end
 
+  def test_record_display
+    sm = StaffMember.new(name: "test", email: "email@test.com")
+    sm.id = 2
+    result = sm.record_display
+    string = "2. Name: test\n   Email: email@test.com"
+    assert_equal(string, result)
+  end
+
 end

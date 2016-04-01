@@ -41,5 +41,12 @@ class LibraryTest < Minitest::Test
     refute(l.valid?, "Should not be valid as phone_number can't be empty")
   end
 
+  def test_record_display
+    l = Library.new(branch_name: "East Library", address: "123 East Drive", phone_number: "555-456-7654")
+    l.id = 2
+    result = l.record_display
+    string = "2. Branch Name: East Library\n   Address: 123 East Drive\n   Phone Number: 555-456-7654"
+    assert_equal(string, result)
+  end
 
 end

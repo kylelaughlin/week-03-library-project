@@ -30,4 +30,12 @@ class PatronTest < Minitest::Test
     refute(patron.valid?, "Should be invalid as email can't be blank")
   end
 
+  def test_record_display
+    patron = Patron.new(name: "Frank", email: "email@Frank.com")
+    patron.id = 2
+    result = patron.record_display
+    string = "2. Name: Frank\n   Email: email@Frank.com"
+    assert_equal(string, result)
+  end
+
 end

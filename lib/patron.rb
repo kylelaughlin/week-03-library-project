@@ -13,7 +13,7 @@ class Patron < ActiveRecord::Base
   #
   # Returns the created string
   def record_display
-    "#{pn.id}. Name: #{pn.name}\n   Email: #{pn.email}"
+    "#{id}. Name: #{name}\n   Email: #{email}"
   end
 
 end
