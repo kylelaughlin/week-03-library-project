@@ -717,18 +717,22 @@ end
 def check_out_book(patron, selected_book)
   patron.books_checked_out_count += 1
   selected_book.patron = patron
+  saved = selected_book.save
   puts "\n\n#{selected_book.title} is now checked out by #{patron.name}"
 end
 
-def check_in_book_patron(selected_book)
+def check_in_book(selected_book)
+  puts "\n\n   --- Checkin #{selected_book.title} ---\n\n"
+
   patron = Patron.find_by_id(selected_book.patron_id)
   print "#{patron.name} has '#{selected_book.title}' checked out.\n\n"\
        "Would you like to check it back in? (Y\\N)\n\n >>"
   selection = gets.chomp.downcase
-  selection.valid_selection(selection,["y","yes","n","no"])
+  selection = valid_selection(selection,["y","yes","n","no"])
   if selection == "y" || selection == "yes"
     patron.books_checked_out_count -= 1
     selected_book.patron_id = nil
+    selected_book.save
     puts "#{selected_book.title} has been checked in."
   else
     #Go back to selected_book_record
@@ -831,7 +835,7 @@ end
 def valid_selection(selection, acceptable_choices)
   while !(acceptable_choices.include? selection)
     print "That is an invalid selection please select an option from above.\n\n >>"
-    selection = gets.chomp.to_i
+    selection = gets.chomp
   end
   selection
 end
