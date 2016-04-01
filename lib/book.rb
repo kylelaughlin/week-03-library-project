@@ -5,4 +5,6 @@ class Book < ActiveRecord::Base
   validates :author, presence: true
   validates :isbn, exclusion: {in: [nil]}, uniqueness: true
 
+  belongs_to :library
+
 end

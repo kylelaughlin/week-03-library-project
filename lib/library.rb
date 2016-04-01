@@ -11,4 +11,6 @@ class Library < ActiveRecord::Base
   validates :address, presence: true
   validates :phone_number, presence: true
 
+  has_many :books
+
 end
