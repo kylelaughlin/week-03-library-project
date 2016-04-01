@@ -245,12 +245,29 @@ def save_new_book(title, author, isbn)
   if saved
     puts "\nBook created:"
     puts new_book.record_display
+    assign_to_book_library(new_book)
   else
     puts "\nBook not created!\n"
     new_book.errors.messages.each do |k,v|
       puts "#{k} #{v}\n"
     end
   end
+end
+
+def assign_to_book_library(new_book)
+  puts "\nPlease select one of the following libraries for the new book:"
+  Library.all.each do |l|
+    puts l.record_display
+  end
+  puts "\n >>"
+  selection = gets.chomp.to_i
+  while Library.find_by_id(selection).nil?
+    print "That is not a valid selection. Please select from the libraries above.\n\n >>"
+    selection = gets.chomp.to_i
+  end
+  new_staff_member.library = Library.find_by_id(selection)
+  puts "\n#{new_book.title} is now assigned to #{new_book.library.branch_name}"
+  books_menu
 end
 
 # Books Index: Shows all books and their infomation
