@@ -702,8 +702,12 @@ def check_out_book(selected_book)
     puts patron.record_display
   end
   print "\nPlease select a patron above to check out this book\n\n >>"
-  patron_id = gets.chomp.to_i
+  selected_patron_id = gets.chomp.to_i
+  selected_patron_id = valid_patron(selected_patron_id)
+
 end
+
+
 
 ######################################################
 #### PATRONS PATH ####################################
