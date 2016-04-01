@@ -283,7 +283,8 @@ def patrons_menu
   puts "\n\n   --- Patrons Main Menu ---\n\n"
   print "Please select one of the following options:\n\n"\
         "1.Show all patrons\n"\
-        "2. Back to Main Menu\n\n >>"
+        "2. Add new patron\n"\
+        "3. Back to Main Menu\n\n >>"
   selection = gets.chomp.to_i
   selection = valid_selection(selection, [1,2,3])
 
@@ -307,7 +308,7 @@ def patron_new
   print "\nWhat is the patron's email?\n\n >>"
   email = gets.chomp
   save_new_patron(name, email)
-  books_menu
+  patrons_menu
 end
 
 def save_new_patron(name, email)
