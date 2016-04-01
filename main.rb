@@ -390,12 +390,14 @@ def edit_staff_member_record(selected_staff_member)
     print "What would you like to edit?\n"
     print "#{selected_staff_member.record_edit_display}\nBack. Go back to Selected Staff Member\n >>"
     selection = gets.chomp.downcase
-    selection = valid_selection(selection, ["1","2","back"])
+    selection = valid_selection(selection, ["1","2","3","back"])
     case selection
     when "1"
       edit_staff_member_name(selected_staff_member)
     when "2"
       edit_staff_member_email(selected_staff_member)
+    when "3"
+      edit_staff_member_library(selected_staff_member)
     when "back"
       #go back to selected_library_record
     else
@@ -428,6 +430,19 @@ def edit_staff_member_email(selected_staff_member)
   staff_member_updated(saved, selected_staff_member)
 end
 
+def edit_staff_member_library(selected_staff_member)
+  puts "Available libraries:"
+  Library.all.each do |l|
+    puts l.record_display
+  end
+  print "Select new library. >>"
+  new_library_id = gets.chomp.to_i
+  new_library_id = valid_library(new_library_id)
+  selected_staff_member.library = Library.find_by_id(new_library_id)
+  saved = selected_staff_member.save
+  staff_member_updated(saved, selected_staff_member)
+end
+
 # Checks if save is true or false, if false show errors with record
 #
 # + saved: a boolean representing whether the record saved to database or not
@@ -445,6 +460,7 @@ def staff_member_updated(saved, selected_staff_member)
     end
   end
 end
+
 ####################################################
 #### BOOKS PATH ####################################
 ####################################################
