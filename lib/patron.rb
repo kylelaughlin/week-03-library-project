@@ -6,6 +6,7 @@ class Patron < ActiveRecord::Base
 
   validates :name, presence: true
   validates :email, presence: true, uniqueness: true
+  validates :books_checked_out_count, numericality: {less_than_or_equal_to: 3}
 
   has_many :books
 

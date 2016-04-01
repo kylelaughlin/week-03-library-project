@@ -760,7 +760,7 @@ end
 # + email: string representing the email of the new patron
 #
 def save_new_patron(name, email)
-  new_patron = Patron.new(name: name, email: email)
+  new_patron = Patron.new(name: name, email: email, books_checked_out_count: 0)
   saved = new_patron.save
   if saved
     puts "\nPatron created:"
