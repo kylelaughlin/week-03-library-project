@@ -663,7 +663,7 @@ def valid_library(selected_library_id)
 end
 
 def valid_staff_member(selected_staff_member_id)
-  while StaffMember.find_by_id(selected_staff_member.id).nil?
+  while StaffMember.find_by_id(selected_staff_member_id).nil?
     print "That is not a valid selection. Please select from the staff members above.\n\n >>"
     selected_staff_member_id = gets.chomp.to_i
   end
