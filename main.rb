@@ -129,10 +129,7 @@ def libraries_index
     when "1"
       print "\nPlease select a library from above.\n\n >>"
       selected_library_id = gets.chomp.to_i
-      while Library.find_by_id(selected_library_id).nil?
-        print "That is not a valid selection. Please select from the libraries above.\n\n >>"
-        selected_library_id = gets.chomp.to_i
-      end
+      selected_library = valid_library(selected_library)
       selected_library_record(Library.find_by_id(selected_library_id))
     when "back"
       #back to the libraries menu
@@ -345,10 +342,13 @@ def staff_members_index
       puts sm.record_display
     end
 
-    print "\nPlease select one of the following options:\nBack. Go back to Staff Members Menu\n\n >>"
+    print "\nPlease select one of the following options:\n 1.Select a staff member"\
+    "\nBack. Go back to Staff Members Menu\n\n >>"
     selection = gets.chomp.downcase
-    selection = valid_selection(selection,["back"])
+    selection = valid_selection(selection,["1","back"])
     case selection
+    when "1"
+      selected_staff_member_record
     when "back"
       #go back to staff members menu
     end
@@ -465,8 +465,9 @@ def books_index
   end
 end
 
-
+######################################################
 #### PATRONS PATH ####################################
+######################################################
 
 # Patrons Menu: allows user to select between these options:
 #   + Show all patrons
@@ -561,6 +562,14 @@ def valid_selection(selection, acceptable_choices)
     selection = gets.chomp.to_i
   end
   selection
+end
+
+def valid_library(selected_library)
+  while Library.find_by_id(selected_library_id).nil?
+    print "That is not a valid selection. Please select from the libraries above.\n\n >>"
+    selected_library_id = gets.chomp.to_i
+  end
+  selected_library
 end
 
 binding.pry
