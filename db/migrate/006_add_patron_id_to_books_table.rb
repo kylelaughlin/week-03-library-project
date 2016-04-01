@@ -1,5 +1,5 @@
-class AddPatronIdToBooksTable < Activerecord::Migration
+class AddPatronIdToBooksTable < ActiveRecord::Migration
   def change
-    add_column :books, :patron_id:, :integer
+    add_column :books, :patron_id, :integer
   end
 end
