@@ -291,34 +291,34 @@ def patrons_menu
   when 1
     patrons_index
   when 2
+    patron_new
+  when 3
     main_menu
   else
     puts "Something broke - Patrons Menu Selection"
   end
 end
 
-def book_new
-  puts "\n\n   --- Add New Book ---\n\n"
+def patron_new
+  puts "\n\n   --- Add New Patron ---\n\n"
   print "Please fill in all requested information.\n\n"\
-        "What is the title of the book?\n\n >>"
-  title = gets.chomp
-  print "\nWho is the author of the book?\n\n >>"
-  author = gets.chomp
-  print "What is the ISBN of the book?\n\n >>"
-  isbn = gets.chomp
-  save_new_book(title, author, isbn)
+        "What is the patron's name?\n\n >>"
+  name = gets.chomp
+  print "\nWhat is the patron's email?\n\n >>"
+  email = gets.chomp
+  save_new_patron(name, email)
   books_menu
 end
 
-def save_new_book(title, author, isbn)
-  new_book = Book.new(title: title, author: author, isbn: isbn)
-  saved = new_book.save
+def save_new_patron(name, email)
+  new_patron = Patron.new(name: name, email: email)
+  saved = new_patron.save
   if saved
-    puts "\nBook created:"
-    puts new_book.record_display
+    puts "\nPatron created:"
+    puts new_patron.record_display
   else
-    puts "\nBook not created!\n"
-    new_book.errors.messages.each do |k,v|
+    puts "\nPatron not created!\n"
+    new_patron.errors.messages.each do |k,v|
       puts "#{k} #{v}\n"
     end
   end
