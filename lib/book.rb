@@ -12,7 +12,7 @@ class Book < ActiveRecord::Base
   #
   # Returns the created string
   def record_display
-    string = "#{id}. Title: #{title}\n   Author: #{author}\n   ISBN: #{isbn}"
+    "#{id}. Title: #{title}\n   Author: #{author}\n   ISBN: #{isbn}"
   end
 
 end
