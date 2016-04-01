@@ -14,7 +14,7 @@ class StaffMember < ActiveRecord::Base
   #
   # Returns the created string
   def record_display
-    string = "#{id}. Name: #{name}\n   Email: #{email}"
+    "#{id}. Name: #{name}\n   Email: #{email}"
   end
 
 end

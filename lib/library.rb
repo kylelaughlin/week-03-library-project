@@ -15,9 +15,9 @@ class Library < ActiveRecord::Base
   has_many :staff_members
 
   def record_display
-    string = "#{id}. Branch Name: #{branch_name}\n"\
-             "   Address: #{address}\n"\
-             "   Phone Number: #{phone_number}"
+    "#{id}. Branch Name: #{branch_name}\n"\
+    "   Address: #{address}\n"\
+    "   Phone Number: #{phone_number}"
   end
 
 end
