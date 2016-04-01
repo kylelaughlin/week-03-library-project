@@ -14,7 +14,7 @@ class StaffMember < ActiveRecord::Base
   #
   # Returns the created string
   def record_display
-    "#{id}. Name: #{name}\n   Email: #{email}"
+    "#{id}. Name: #{name}\n   Email: #{email}\n   Library: #{Library.find_by_id(library_id).branch_name}"
   end
 
   # Creates a string representing a Staff Member's attributes to be selected from
@@ -22,7 +22,8 @@ class StaffMember < ActiveRecord::Base
   # Returns the created string
   def record_edit_display
     "1. Name: #{name}\n"\
-    "2. Email: #{email}"
+    "2. Email: #{email}\n"\
+    "3. Library: #{Library.find_by_id(library_id).branch_name}"
   end
 
 end
