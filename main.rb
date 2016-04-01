@@ -46,7 +46,7 @@ end
 def libraries_menu
   puts "\n\n   --- Library Branch Main Menu ---\n\n"
   print "Please select one of the following options:\n\n"\
-        "1.Show all libraries\n2. Add new library\n"\
+        "1. Show all libraries\n2. Add new library\n"\
         "3. Back to Main Menu\n\n >>"
   selection = gets.chomp.to_i
   selection = valid_selection(selection, [1,2,3])
@@ -68,7 +68,7 @@ def libraries_index
   puts "\n\n   --- Library Branch Index ---\n\n"
   puts "All Library Locations:"
   Library.all.each do |l|
-    puts "#{l.id}. Name: #{l.branch_name}\n   Address: #{l.address}\n   Phone Number: #{l.phone_number}"
+    puts l.record_display
   end
 
   print "\nPlease select one of the following options:\n1. Back to Library Menu\n\n >>"
@@ -100,7 +100,7 @@ def save_new_library(branch_name, address, phone_number)
   saved = new_library.save
   if saved
     puts "\nLibrary Created:"
-    puts new_library.library_display
+    puts new_library.record_display
   else
     puts "\nLibrary not created\n"
     new_library.errors.messages.each do |k,v|
