@@ -258,6 +258,7 @@ def staff_members_menu
   end
 end
 
+
 def staff_member_new
   puts "\n\n   --- Add New Staff Member ---\n\n"
   print "Please fill in all requested information.\n\n"\
