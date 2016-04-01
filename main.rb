@@ -102,7 +102,7 @@ def save_new_library(branch_name, address, phone_number)
     puts "\nLibrary Created:"
     puts new_library.record_display
   else
-    puts "\nLibrary not created\n"
+    puts "\nLibrary not created!\n"
     new_library.errors.messages.each do |k,v|
       puts "#{k} #{v}\n"
     end
@@ -156,7 +156,7 @@ def save_new_staff_member(name, email)
     puts "\nStaff member created:"
     puts new_staff_member.record_display
   else
-    puts "\nStaff member not created.\n"
+    puts "\nStaff member not created!\n"
     new_staff_member.errors.messages.each do |k,v|
       puts "#{k} #{v}\n"
     end
