@@ -56,8 +56,8 @@ def libraries_menu
   while selection != "back"
     puts "\n\n   --- Library Branch Main Menu ---\n\n"
     print "Please select one of the following options:\n\n"\
-          "1. Show all libraries\n2. Add new library\n"\
-          "Back. Go back to Main Menu\n\n >>"
+    "1. Show all libraries\n2. Add new library\n"\
+    "Back. Go back to Main Menu\n\n >>"
     selection = gets.chomp.downcase
     selection = valid_selection(selection, ["1","2","back"])
     case selection
@@ -78,7 +78,7 @@ end
 def library_new
   puts "\n\n   --- Add New Library ---\n\n"
   print "Please fill in all requested information.\n\nWhat is the name of the new library?\n"\
-       "\n >>"
+  "\n >>"
   branch_name = gets.chomp
   print "\nWhat is the address of the new library?\n\n >>"
   address = gets.chomp
@@ -96,8 +96,8 @@ end
 # Returns nil
 def save_new_library(branch_name, address, phone_number)
   new_library = Library.new(branch_name: branch_name,
-                            address: address,
-                            phone_number: phone_number)
+  address: address,
+  phone_number: phone_number)
   saved = new_library.save
   if saved
     puts "\nLibrary Created:"
@@ -122,7 +122,7 @@ def libraries_index
     end
 
     print "\nPlease select one of the following options:\n1. Select a library\n"\
-          "Back. Go back to Library Menu\n\n >>"
+    "Back. Go back to Library Menu\n\n >>"
     selection = gets.chomp
     selection = valid_selection(selection,["1","back"])
     case selection
@@ -151,7 +151,7 @@ def selected_library_record(selected_library)
     puts "\n\n   --- #{selected_library.branch_name} ---\n\n"
     puts selected_library.record_display
     print "\nPlease select one of the following:\n\n1. Edit Record\n"\
-          "Back. Go back to Show all libraries\n\n >>"
+    "Back. Go back to Show all libraries\n\n >>"
     selection = gets.chomp.downcase
     selection = valid_selection(selection, ["1","back"])
     case selection
@@ -260,9 +260,9 @@ def staff_members_menu
   while selection != "back"
     puts "\n\n   --- Staff Member Main Menu ---\n\n"
     print "Please select one of the following options:\n\n"\
-          "1. Show all staff members\n"\
-          "2. Add new staff member\n"\
-          "Back. Go back to Main Menu\n\n >>"
+    "1. Show all staff members\n"\
+    "2. Add new staff member\n"\
+    "Back. Go back to Main Menu\n\n >>"
     selection = gets.chomp.downcase
     selection = valid_selection(selection, ["1","2","back"])
 
@@ -285,8 +285,8 @@ end
 def staff_member_new
   puts "\n\n   --- Add New Staff Member ---\n\n"
   print "Please fill in all requested information.\n\n"\
-        "What is the new staff member's name?\n"\
-       "\n >>"
+  "What is the new staff member's name?\n"\
+  "\n >>"
   name = gets.chomp
   print "\nWhat is the new staff member's email?\n\n >>"
   email = gets.chomp
@@ -365,24 +365,25 @@ end
 #
 def books_menu
   selection = ""
-  while != "back"
-  puts "\n\n   --- Books Main Menu ---\n\n"
-  print "Please select one of the following options:\n\n"\
-        "1.Show all books\n"\
-        "2. Add new book\n"\
-        "Back. Go back to Main Menu\n\n >>"
-  selection = gets.chomp.to_i
-  selection = valid_selection(selection, ["1","2","back"])
+  while selection != "back"
+    puts "\n\n   --- Books Main Menu ---\n\n"
+    print "Please select one of the following options:\n\n"\
+    "1.Show all books\n"\
+    "2. Add new book\n"\
+    "Back. Go back to Main Menu\n\n >>"
+    selection = gets.chomp.to_i
+    selection = valid_selection(selection, ["1","2","back"])
 
-  case selection
-  when "1"
-    books_index
-  when "2"
-    book_new
-  when "back"
-    #Go back to main menu
-  else
-    puts "Something broke - Books Menu Selection"
+    case selection
+    when "1"
+      books_index
+    when "2"
+      book_new
+    when "back"
+      #Go back to main menu
+    else
+      puts "Something broke - Books Menu Selection"
+    end
   end
 end
 
@@ -392,7 +393,7 @@ end
 def book_new
   puts "\n\n   --- Add New Book ---\n\n"
   print "Please fill in all requested information.\n\n"\
-        "What is the title of the book?\n\n >>"
+  "What is the title of the book?\n\n >>"
   title = gets.chomp
   print "\nWho is the author of the book?\n\n >>"
   author = gets.chomp
@@ -474,23 +475,24 @@ end
 def patrons_menu
   selection = ""
   while selection != "back"
-  puts "\n\n   --- Patrons Main Menu ---\n\n"
-  print "Please select one of the following options:\n\n"\
-        "1.Show all patrons\n"\
-        "2. Add new patron\n"\
-        "Back. Go back to Main Menu\n\n >>"
-  selection = gets.chomp.to_i
-  selection = valid_selection(selection, ["1","2","back"])
+    puts "\n\n   --- Patrons Main Menu ---\n\n"
+    print "Please select one of the following options:\n\n"\
+    "1.Show all patrons\n"\
+    "2. Add new patron\n"\
+    "Back. Go back to Main Menu\n\n >>"
+    selection = gets.chomp.to_i
+    selection = valid_selection(selection, ["1","2","back"])
 
-  case selection
-  when "1"
-    patrons_index
-  when "2"
-    patron_new
-  when "back"
-    #go back to main menu
-  else
-    puts "Something broke - Patrons Menu Selection"
+    case selection
+    when "1"
+      patrons_index
+    when "2"
+      patron_new
+    when "back"
+      #go back to main menu
+    else
+      puts "Something broke - Patrons Menu Selection"
+    end
   end
 end
 
@@ -500,7 +502,7 @@ end
 def patron_new
   puts "\n\n   --- Add New Patron ---\n\n"
   print "Please fill in all requested information.\n\n"\
-        "What is the patron's name?\n\n >>"
+  "What is the patron's name?\n\n >>"
   name = gets.chomp
   print "\nWhat is the patron's email?\n\n >>"
   email = gets.chomp
