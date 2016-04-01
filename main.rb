@@ -472,21 +472,23 @@ end
 #   + Back to Main Menu
 #
 def patrons_menu
+  selection = ""
+  while selection != "back"
   puts "\n\n   --- Patrons Main Menu ---\n\n"
   print "Please select one of the following options:\n\n"\
         "1.Show all patrons\n"\
         "2. Add new patron\n"\
-        "3. Back to Main Menu\n\n >>"
+        "Back. Go back to Main Menu\n\n >>"
   selection = gets.chomp.to_i
-  selection = valid_selection(selection, [1,2,3])
+  selection = valid_selection(selection, ["1","2","back"])
 
   case selection
-  when 1
+  when "1"
     patrons_index
-  when 2
+  when "2"
     patron_new
-  when 3
-    main_menu
+  when "back"
+    #go back to main menu
   else
     puts "Something broke - Patrons Menu Selection"
   end
@@ -503,7 +505,6 @@ def patron_new
   print "\nWhat is the patron's email?\n\n >>"
   email = gets.chomp
   save_new_patron(name, email)
-  patrons_menu
 end
 
 # Save and validate the record, don't save and show errors if invalid record
@@ -528,18 +529,21 @@ end
 # Patrons Index: Shows all patrons and their infomation Select option
 #
 def patrons_index
-  puts "\n\n   --- Patrons Index ---\n\n"
-  puts "All Patrons:"
-  Patron.all.each do |pn|
-    puts pn.record_display
-  end
+  selection = ""
+  while selection != "book"
+    puts "\n\n   --- Patrons Index ---\n\n"
+    puts "All Patrons:"
+    Patron.all.each do |pn|
+      puts pn.record_display
+    end
 
-  print "\nPlease select one of the following options:\n1. Back to Books Menu\n\n >>"
-  selection = gets.chomp.to_i
-  selection = valid_selection(selection,[1])
-  case selection
-  when 1
-    patrons_menu
+    print "\nPlease select one of the following options:\nBack. Go back to Books Menu\n\n >>"
+    selection = gets.chomp.to_i
+    selection = valid_selection(selection,["back"])
+    case selection
+    when "back"
+      # go back to patrons menu
+    end
   end
 end
 
