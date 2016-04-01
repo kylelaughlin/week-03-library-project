@@ -561,12 +561,40 @@ def books_index
       puts b.record_display
     end
 
-    print "\nPlease select one of the following options:\nBack. Go back to Books Menu\n\n >>"
+    print "\nPlease select one of the following options:\n1. Select a book to view or edit\nBack. Go back to Books Menu\n\n >>"
     selection = gets.chomp.downcase
-    selection = valid_selection(selection,["back"])
+    selection = valid_selection(selection,["1","back"])
     case selection
+    when "1"
+      print "\nPlease select a book from above.\n\n >>"
+      selected_book_id = gets.chomp.to_i
+      selected_book_id = valid_book(selected_book_id)
+      selected_book_record(Book.find_by_id(selected_book_id))
     when "back"
       #go back to books menu
+    end
+  end
+end
+
+def selected_book_record(selected_staff_member)
+  selection = ""
+  while selection != "back"
+    puts "\n\n   --- #{selected_staff_member.name} ---\n\n"
+    puts selected_staff_member.record_display
+    print "\nPlease select one of the following:\n\n1. Edit Record\n"\
+    "Back. Go back to Show all libraries\n\n >>"
+    selection = gets.chomp.downcase
+    selection = valid_selection(selection, ["1","back"])
+    case selection
+    when "1"
+      print "\nPlease select a book from above.\n\n >>"
+      selected_book_id = gets.chomp.to_i
+      selected_book_id = valid_book(selected_book_id)
+      selected_book_record(StaffMember.find_by_id(selected_staff_member_id))
+    when "back"
+      #go back to staff members index
+    else
+      puts "Something broke - selected staff member record selection"
     end
   end
 end
@@ -684,6 +712,14 @@ def valid_staff_member(selected_staff_member_id)
     selected_staff_member_id = gets.chomp.to_i
   end
   selected_staff_member_id
+end
+
+def valid_book(selected_book_id)
+  while Book.find_by_id(selected_book_id).nil?
+    print "That is not a valid selection. Please select from the books above.\n\n >>"
+    selected_book_id = gets.chomp.to_i
+  end
+  selected_book_id
 end
 
 binding.pry
