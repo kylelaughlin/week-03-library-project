@@ -697,7 +697,12 @@ def check_in_out_book(selected_book)
 end
 
 def check_out_book(selected_book)
-  
+  puts "Patrons:\n\n"
+  Patrons.all.each do |patron|
+    puts patron.record_display
+  end
+  print "\nPlease select a patron above to check out this book\n\n >>"
+  patron_id = gets.chomp.to_i
 end
 
 ######################################################
@@ -821,6 +826,14 @@ def valid_book(selected_book_id)
     selected_book_id = gets.chomp.to_i
   end
   selected_book_id
+end
+
+def valid_patron(selected_patron_id)
+  while Patron.find_by_id(selected_patron_id).nil?
+    print "That is not a valid selection. Please select from the patrons above.\n\n"
+    selected_patron_id = gets.chomp.to_i
+  end
+  selected_patron_id
 end
 
 binding.pry
