@@ -62,6 +62,8 @@ def libraries_menu
   end
 end
 
+# Create a new library
+# Prompts for library information - calls another method to save and validate
 def library_new
   puts "\n\n   --- Add New Library ---\n\n"
   print "Please fill in all requested information.\n\nWhat is the name of the new library?\n"\
@@ -75,6 +77,13 @@ def library_new
   libraries_menu
 end
 
+# Saves the new library and validates it
+#
+# + branch_name: a string representing the name of the new library branch
+# + address: a string representing the address of the new library branch
+# + phone_number: a string representing the phone number of the new library branch
+#
+# Returns nil
 def save_new_library(branch_name, address, phone_number)
   new_library = Library.new(branch_name: branch_name,
                             address: address,
@@ -118,13 +127,18 @@ def libraries_index
   end
 end
 
+# Display The selected record and select an option to edit or go back
+#
+# + selected_lbrary: a library object which was selected by the user
+#
+# Returns nil
 def selected_library_record(selected_library)
   puts "\n\n   --- #{selected_library.branch_name} ---\n\n"
   puts selected_library.record_display
   print "\nPlease select one of the following:\n\n1. Edit Record\n"\
-       "2. Back to Show all libraries\n\n >>"
+        "2. Back to Show all libraries\n\n >>"
   selection = gets.chomp.to_i
-  selection = valid_selection(selection, [1,2,3])
+  selection = valid_selection(selection, [1,2])
   case selection
   when 1
     edit_library_record(selected_library)
@@ -135,20 +149,86 @@ def selected_library_record(selected_library)
   end
 end
 
+# Select which library attribute to change
+#
+# + selected_lbrary: a library object which was selected by the user
+#
+# Returns nil
 def edit_library_record(selected_library)
-  print "What would you like to edit?"
-  print "#{selected_library.record_edit_display}\n\n >>"
+  puts "\n\n   --- Edit #{selected_library.branch_name} ---\n\n"
+  print "What would you like to edit?\n"
+  print "#{selected_library.record_edit_display}\n4. Back to Selected Library\n >>"
   selection = gets.chomp.to_i
-  selection = valid_selection(selection, [1,2,3])
+  selection = valid_selection(selection, [1,2,3,4])
   case selection
   when 1
-    edit_library_name(selected_library)
+    edit_library_branch_name(selected_library)
   when 2
     edit_library_address(selected_library)
   when 3
     edit_library_phone_number(selected_library)
+  when 4
+    selected_library_record(selected_library)
   else
     puts "Something broke - Library edit record selection"
+  end
+end
+
+# Change the library branch_name
+#
+# + selected_lbrary: a library object which was selected by the user
+#
+#
+def edit_library_branch_name(selected_library)
+  print "New branch name: >>"
+  branch_name = gets.chomp
+  saved = selected_library.update_attributes(branch_name: branch_name)
+  library_updated(saved, selected_library)
+  edit_library_record(selected_library)
+end
+
+# Change the library address
+#
+# + selected_lbrary: a library object which was selected by the user
+#
+#
+def edit_library_address(selected_library)
+  print "New address: >>"
+  address = gets.chomp
+  saved = selected_library.update_attributes(address: address)
+  library_updated(saved, selected_library)
+  edit_library_record(selected_library)
+end
+
+# Change the library phone_number
+#
+# + selected_lbrary: a library object which was selected by the user
+#
+#
+def edit_library_phone_number(selected_library)
+  print "New phone number: >>"
+  phone_number = gets.chomp
+  saved = selected_library.update_attributes(phone_number: phone_number)
+  library_updated(saved, selected_library)
+  edit_library_record(selected_library)
+end
+
+# Checks if save is true or false, if false show errors with record
+#
+# + saved: a boolean representing whether the record saved to database or not
+# + selected_lbrary: a library object which was selected by the user
+#
+#
+def library_updated(saved, selected_library)
+  if saved
+    puts "\nLibrary Updated:"
+    puts selected_library.record_display
+  else
+    puts "\nLibrary not updated!\n"
+    selected_library.errors.messages.each do |k,v|
+      puts "#{k} #{v}\n"
+    end
+  end
 end
 
 #### STAFF MEMBERS PATH ##################################
@@ -176,7 +256,6 @@ def staff_members_menu
   else
     puts "Something broke - Staff Member Menu Selection"
   end
-
 end
 
 def staff_member_new
