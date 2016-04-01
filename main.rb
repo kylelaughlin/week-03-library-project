@@ -45,13 +45,17 @@ end
 #   Back to Main Menue
 def libraries_menu
   puts "\n\n   --- Library Branch Main Menu ---\n\n"
-  print "Please select one of the following options:\n\n1.Show all libraries\n2. Back to Main Menu\n\n >>"
+  print "Please select one of the following options:\n\n"\
+        "1.Show all libraries\n2. Add new library\n"\
+        "3. Back to Main Menu\n\n >>"
   selection = gets.chomp.to_i
-  selection = valid_selection(selection, [1,2])
+  selection = valid_selection(selection, [1,2,3])
   case selection
   when 1
     libraries_index
   when 2
+    librariy_new
+  when 3
     main_menu
   else
     puts "Something broke = Libraries Menu Selection"
