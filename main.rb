@@ -130,7 +130,25 @@ def selected_library_record(selected_library)
     edit_library_record(selected_library)
   when 2
     libraries_index
+  else
+    puts "Something broke - selected library record selection"
   end
+end
+
+def edit_library_record(selected_library)
+  print "What would you like to edit?"
+  print "#{selected_library.record_edit_display}\n\n >>"
+  selection = gets.chomp.to_i
+  selection = valid_selection(selection, [1,2,3])
+  case selection
+  when 1
+    edit_library_name(selected_library)
+  when 2
+    edit_library_address(selected_library)
+  when 3
+    edit_library_phone_number(selected_library)
+  else
+    puts "Something broke - Library edit record selection"
 end
 
 #### STAFF MEMBERS PATH ##################################

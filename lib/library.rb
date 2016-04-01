@@ -20,4 +20,10 @@ class Library < ActiveRecord::Base
     "   Phone Number: #{phone_number}"
   end
 
+  def record_edit_display
+    "1. Branch Name: #{branch_name\n}"\
+    "2. Address: #{address}\n"\
+    "3. Phone Number: #{phone_number}"
+  end
+
 end
