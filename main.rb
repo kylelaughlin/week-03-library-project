@@ -145,7 +145,7 @@ def staff_member_new
   name = gets.chomp
   print "\nWhat is the new staff member's email?\n\n >>"
   email = gets.chomp
-  save_new_staff_member(name, email)
+  new_staff_member = save_new_staff_member(name, email)
   staff_members_menu
 end
 
@@ -155,12 +155,30 @@ def save_new_staff_member(name, email)
   if saved
     puts "\nStaff member created:"
     puts new_staff_member.record_display
+    assign_to_library(new_staff_member)
   else
     puts "\nStaff member not created!\n"
     new_staff_member.errors.messages.each do |k,v|
       puts "#{k} #{v}\n"
     end
   end
+  new_staff_member
+end
+
+def assign_to_library(new_staff_member)
+  puts "\nPlease select one of the following libraries for the new staff member:"
+  Library.all.each do |l|
+    puts l.record_display
+  end
+  puts "\n >>"
+  selection = gets.chomp.to_i
+  while Library.find_by_id(selection).nil?
+    print "That is not a valid selection. Please select from the libraries above.\n\n >>"
+    selection = gets.chomp.to_i
+  end
+  new_staff_member.library = Library.find_by_id(selection)
+  puts "\n#{new_staff_member.name} is now assigned to #{new_staff_member.library.branch_name}"
+  staff_members_menu
 end
 
 # Staff Member Index: Shows all staff members and their infomation
