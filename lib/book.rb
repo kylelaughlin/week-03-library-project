@@ -6,5 +6,6 @@ class Book < ActiveRecord::Base
   validates :isbn, exclusion: {in: [nil]}, uniqueness: true
 
   belongs_to :library
+  belongs_to :patron
 
 end
