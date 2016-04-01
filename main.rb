@@ -477,7 +477,7 @@ def books_menu
     "1.Show all books\n"\
     "2. Add new book\n"\
     "Back. Go back to Main Menu\n\n >>"
-    selection = gets.chomp.to_i
+    selection = gets.chomp.downcase
     selection = valid_selection(selection, ["1","2","back"])
 
     case selection
@@ -554,14 +554,14 @@ end
 #
 def books_index
   selection = ""
-  while selectino != "back"
+  while selection != "back"
     puts "\n\n   --- Books Index ---\n\n"
     puts "All Books:"
     Book.all.each do |b|
       puts b.record_display
     end
 
-    print "\nPlease select one of the following options:\n1. Select a book to view or edit\nBack. Go back to Books Menu\n\n >>"
+    print "\nPlease select one of the following options:\n\n1. Select a book to view or edit\nBack. Go back to Books Menu\n\n >>"
     selection = gets.chomp.downcase
     selection = valid_selection(selection,["1","back"])
     case selection
@@ -576,27 +576,128 @@ def books_index
   end
 end
 
-def selected_book_record(selected_staff_member)
+def selected_book_record(selected_book)
   selection = ""
   while selection != "back"
-    puts "\n\n   --- #{selected_staff_member.name} ---\n\n"
-    puts selected_staff_member.record_display
+    puts "\n\n   --- #{selected_book.title} ---\n\n"
+    puts selected_book.record_display
     print "\nPlease select one of the following:\n\n1. Edit Record\n"\
-    "Back. Go back to Show all libraries\n\n >>"
+          "2. Check in/out"
+          "Back. Go back to Show all libraries\n\n >>"
     selection = gets.chomp.downcase
-    selection = valid_selection(selection, ["1","back"])
+    selection = valid_selection(selection, ["1","2","back"])
     case selection
     when "1"
-      print "\nPlease select a book from above.\n\n >>"
-      selected_book_id = gets.chomp.to_i
-      selected_book_id = valid_book(selected_book_id)
-      selected_book_record(StaffMember.find_by_id(selected_staff_member_id))
+      edit_book_record(selected_book)
+    when "2"
+      check_in_out_book(selected_book)
     when "back"
       #go back to staff members index
     else
-      puts "Something broke - selected staff member record selection"
+      puts "Something broke - selected book record selection"
     end
   end
+end
+
+def edit_book_record(selected_book)
+  selection = ""
+  while selection != "back"
+    puts "\n\n   --- Edit #{selected_book.title} ---\n\n"
+    print "What would you like to edit?\n"
+    print "#{selected_book.record_edit_display}\nBack. Go back to selected book\n >>"
+    selection = gets.chomp.downcase
+    selection = valid_selection(selection, ["1","2","3","back"])
+    case selection
+    when "1"
+      edit_book_title(selected_book)
+    when "2"
+      edit_book_author(selected_book)
+    when "3"
+      edit_book_isbn(selected_book)
+    when "back"
+      #go back to selected_book_record
+    else
+      puts "Something broke - book edit record selection"
+    end
+  end
+end
+
+# Change the book title
+#
+# + selected_book: a Book object which was selected by the user
+#
+#
+def edit_book_title(selected_book)
+  print "New title: >>"
+  title = gets.chomp
+  saved = selected_book.update_attributes(title: title)
+  book_updated(saved, selected_book)
+end
+
+# Change the book author
+#
+# + selected_book: a Book object which was selected by the user
+#
+#
+def edit_book_author(selected_book)
+  print "New author: >>"
+  author = gets.chomp
+  saved = selected_book.update_attributes(author: author)
+  book_updated(saved, selected_book)
+end
+
+#Change the home library of the book_updated
+#
+# + selected_book: a Book object which was selected by the user
+#
+#
+def edit_book_library(selected_book)
+  puts "Available libraries:"
+  Library.all.each do |l|
+    puts l.record_display
+  end
+  print "Select new library. >>"
+  new_library_id = gets.chomp.to_i
+  new_library_id = valid_library(new_library_id)
+  selected_book.library = Library.find_by_id(new_library_id)
+  saved = selected_book.save
+  book_updated(saved, selected_book)
+end
+
+# Checks if save is true or false, if false show errors with record
+#
+# + saved: a boolean representing whether the record saved to database or not
+# + selected_staff_member: a StaffMember object which was selected by the user
+#
+#
+def book_updated(saved, selected_book)
+  if saved
+    puts "\nBook Updated:"
+    puts selected_staff_member.record_display
+  else
+    puts "\nBook not updated!\n"
+    selected_staff_member.errors.messages.each do |k,v|
+      puts "#{k} #{v}\n"
+    end
+  end
+end
+
+# Determines if the book is currently checked out or not
+# checked out if the patron_id is not nil, otherwise it is available
+#
+# + selected_book: a Book object as selected by the user
+#
+# Returns nil
+def check_in_out_book(selected_book)
+  if selected_book.patron_id.nil?
+    check_out_book(selected_book)
+  else
+    check_in_book(selected_book)
+  end
+end
+
+def check_out_book(selected_book)
+  
 end
 
 ######################################################
