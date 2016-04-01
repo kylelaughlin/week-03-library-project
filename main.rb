@@ -14,25 +14,30 @@ require_relative "./lib/patron.rb"
 #   books
 #   patrons
 def main_menu
-  puts "\n\n   --- Library Manager Main Menu ---\n\n"
-  print "Please select one of the following options:\n\n1. Library Branches\n"\
-        "2. Staff Members\n"\
-        "3. Books\n"\
-        "4. Patrons\n\n >>"
-  selection = gets.chomp.to_i
-  #call valid_selection method - (users selection, array of acceptable choices)
-  selection = valid_selection(selection,[1,2,3,4])
-  case selection
-  when 1
-    libraries_menu
-  when 2
-    staff_members_menu
-  when 3
-    books_menu
-  when 4
-    patrons_menu
-  else
-    puts "Something broke - Main menu selection"
+  while selection != "exit"
+    puts "\n\n   --- Library Manager Main Menu ---\n\n"
+    print "Please select one of the following options:\n\n1. Library Branches\n"\
+    "2. Staff Members\n"\
+    "3. Books\n"\
+    "4. Patrons\n"\
+    "Exit. Close Application\n >>"
+    selection = gets.chomp.downcase
+    #call valid_selection method - (users selection, array of acceptable choices)
+    selection = valid_selection(selection,["1","2","3","4","exit"])
+    case selection
+    when "1"
+      libraries_menu
+    when "2"
+      staff_members_menu
+    when "3"
+      books_menu
+    when "4"
+      patrons_menu
+    when "exit"
+      puts "Exiting Application"
+    else
+      puts "Something broke - Main menu selection"
+    end
   end
 
 end
@@ -44,6 +49,7 @@ end
 #   Create new library
 #   Back to Main Menue
 def libraries_menu
+
   puts "\n\n   --- Library Branch Main Menu ---\n\n"
   print "Please select one of the following options:\n\n"\
         "1. Show all libraries\n2. Add new library\n"\
