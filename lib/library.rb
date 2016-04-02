@@ -12,7 +12,7 @@ class Library < ActiveRecord::Base
   validates :phone_number, presence: true
 
   has_many :books
-  has_many :staff_members
+  has_and_belongs_to_many :staff_members
 
   def record_display
     "#{id}. Branch Name: #{branch_name}\n"\
