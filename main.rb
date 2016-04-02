@@ -809,7 +809,7 @@ end
 #
 def patrons_index
   selection = ""
-  while selection != "book"
+  while selection != "back"
     puts "\n\n   --- Patrons Index ---\n\n"
     puts "All Patrons:"
     Patron.all.each do |pn|
@@ -831,7 +831,28 @@ def patrons_index
   end
 end
 
-
+def selected_patron_record(selected_patron)
+  selection = ""
+  while selection != "back"
+    puts "\n\n   --- Patron: #{selected_patron.name} ---\n\n"
+    puts selected_patron.record_display
+    print "\nPlease select one of the following:\n\n1. Edit Record\n"\
+          "2. Check in/out\n"\
+          "Back. Go back to Show all libraries\n\n >>"
+    selection = gets.chomp.downcase
+    selection = valid_selection(selection, ["1","2","back"])
+    case selection
+    when "1"
+      edit_book_record(selected_book)
+    when "2"
+      check_in_out_book(selected_book)
+    when "back"
+      #go back to staff members index
+    else
+      puts "Something broke - selected book record selection"
+    end
+  end
+end
 
 # Checks to see if a users selection is within the acceptable choices
 #

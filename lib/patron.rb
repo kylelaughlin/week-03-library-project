@@ -17,4 +17,6 @@ class Patron < ActiveRecord::Base
     "#{id}. Name: #{name}\n   Email: #{email}"
   end
 
+  def record_edit_display
+    "1. Name: #{name}\n2. Email: #{email}\n"
 end
