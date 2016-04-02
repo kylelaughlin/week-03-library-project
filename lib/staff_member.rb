@@ -17,6 +17,9 @@ class StaffMember < ActiveRecord::Base
     "#{id}. Name: #{name}\n   Email: #{email}\n   Library: #{libraries_display}"
   end
 
+  # Creates a string representing all libraries a staff member is a part of
+  #
+  # Returns the created string
   def libraries_display
     string = ""
     self.library.each do |l|

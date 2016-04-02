@@ -514,6 +514,12 @@ def select_remove_library_from_staff_member(selected_staff_member)
   end
 end
 
+#Re-prompt user for a new library selection if library is not in the acceptable choices
+#
+# +library_id: an integer representing the users selected library
+# +acceptable_choices: an array of library objects that the user can select from
+#
+# Returns an integer representing the library the user selecrted
 def valid_library_selection(library_id,acceptable_choices)
   while !acceptable_choices.include? Library.find_by_id(library_id)
     print "That was an invalid selection. Please select form the libraries above.\n\n >>"
@@ -772,7 +778,7 @@ end
 # + saved: a boolean representing whether the record saved to database or not
 # + selected_staff_member: a StaffMember object which was selected by the user
 #
-#
+# Returns nil
 def book_updated(saved, selected_book)
   if saved
     puts "\nBook Updated:"
@@ -802,6 +808,8 @@ end
 # Select valid patron to check out a selected book
 #
 # + selected_book: A book object as selected by the user
+#
+# Returns nil
 def select_patron_to_check_out(selected_book)
   puts "\n\n   --- Checkout #{selected_book.title} ---\n\n"
   puts "Patrons:\n\n"
@@ -820,7 +828,7 @@ def select_patron_to_check_out(selected_book)
   end
 end
 
-#Checks out a book with database updates
+# Checks out a book with database updates
 #
 # +patron: a Patron object
 # + selected_book: a Book object as selected by the user
@@ -1019,7 +1027,7 @@ end
 #
 # + selected_patron: a Patron object which was selected by the user
 #
-#
+# Calls method
 def edit_patron_name(selected_patron)
   print "New name: >>"
   name = gets.chomp
@@ -1031,7 +1039,7 @@ end
 #
 # + selected_patron: a Patron object which was selected by the user
 #
-#
+# Calls method
 def edit_patron_name(selected_patron)
   print "New email: >>"
   email = gets.chomp
@@ -1061,7 +1069,7 @@ end
 #
 # +selected_patron: a Patron object as selected by the user
 #
-#
+# Returns nil
 def check_in_out_book_from_patron(selected_patron)
   print "\nWould patron #{selected_patron.name} like to:\n1. Check out a book\n"\
        "2. Return a book\nBack. Go back to #{selected_patron.name} options\n\n >>"
@@ -1116,7 +1124,7 @@ end
 # + selected_patron: a Patron object of which the user selected
 # + selected_book_id: an integer representing the selected book
 #
-# returns an integer representing a valid book id
+# Returns an integer representing a valid book id
 def check_book_selection_validity(selected_patron, selected_book_id)
   while !valid_patrons_book(selected_patron.id, selected_book_id)
     print "That is not a valid book to return, Please select from the books above\n\n >>"
@@ -1225,6 +1233,8 @@ end
 #
 # + selection: an integer representing the users selection
 # + acceptable_choices: an array of choices that are valid given the options provided
+#
+# Returns a string representing the valid user selection
 def valid_selection(selection, acceptable_choices)
   while !(acceptable_choices.include? selection)
     print "That is an invalid selection please select an option from above.\n\n >>"
@@ -1285,5 +1295,4 @@ def valid_patron(selected_patron_id)
   selected_patron_id
 end
 
-binding.pry
 main_menu
