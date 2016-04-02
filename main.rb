@@ -445,17 +445,42 @@ def edit_staff_member_email(selected_staff_member)
   staff_member_updated(saved, selected_staff_member)
 end
 
+# Menu to select if a user wants to add or remove a library from staff member
+#
+# + selected_staff_member: a StaffMember object in which a user selected
+#
+# Returns nil
+def edit_staff_member_library(selected_staff_member)
+  selection = ""
+  while selection != "back"
+    print "\n1. Add #{selected_staff_member.name} to another library\n"\
+         "2. Remove #{selected_staff_member.name} from a library\n"\
+         "Back. Go back to the Staff Member menu\n\n >>"
+    selection = gets.chomp.downcase
+    selection = valid_selection(selection,["1","2","back"])
+    case selection
+    when "1"
+      add_library_to_staff_member(selected_staff_member)
+    when "2"
+      remove_library_from_staff_member(selected_staff_member)
+    when "back"
+      #go back to staff member menu
+    else
+      puts "something brok - edit staff member library menu"
+    end
+  end
+end
 # Change the staff members library
 #
 # + selected_staff_member: a StaffMember object as selected by the user
 #
 # Calls method
-def edit_staff_member_library(selected_staff_member)
+def add_library_to_staff_member(selected_staff_member)
   puts "Available libraries:"
-  Library.all.each do |l|
+  Library.where.not(id: selected_staff_member.libraries_id_array).each do |l|
     puts l.record_display
   end
-  print "Select new library. >>"
+  print "Select new library.\n\n >>"
   new_library_id = gets.chomp.to_i
   new_library_id = valid_library(new_library_id)
   selected_staff_member.library = Library.find_by_id(new_library_id)

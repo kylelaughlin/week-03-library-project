@@ -34,12 +34,26 @@ class StaffMember < ActiveRecord::Base
     "3. Library: #{libraries_edit_display}"
   end
 
+  #Creates a string of all libraries in a format for the library selection Menue
+  #
+  # returns the created string
   def libraries_edit_display
     string = ""
     self.library.each do |l|
       string += "#{l.branch_name}\n            "
     end
     string
+  end
+
+  # Creates an array of a staff member's library ids
+  #
+  # Returns the created array of library ids
+  def libraries_id_array
+    staff_member_library_ids = []
+    self.library.each do |l|
+      staff_member_library_ids << l.id
+    end
+    staff_member_library_ids
   end
 
 end
