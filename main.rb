@@ -692,7 +692,7 @@ def check_in_out_book(selected_book)
   if selected_book.patron_id.nil?
     select_patron_to_check_out(selected_book)
   else
-    check_in_book(selected_book)
+    check_in_book_prompt(selected_book)
   end
 end
 
@@ -721,26 +721,39 @@ def check_out_book(patron, selected_book)
   puts "\n\n#{selected_book.title} is now checked out by #{patron.name}"
 end
 
-def check_in_book(selected_book)
+# Prompt user if they want to check in a book
+#
+# + selected_book: a Book object as selected by the user
+#
+# Returns nil
+def check_in_book_prompt(selected_book)
   puts "\n\n   --- Checkin #{selected_book.title} ---\n\n"
 
-  patron = Patron.find_by_id(selected_book.patron_id)
-  print "#{patron.name} has '#{selected_book.title}' checked out.\n\n"\
+  selected_patron = Patron.find_by_id(selected_book.patron_id)
+  print "#{selected_patron.name} has '#{selected_book.title}' checked out.\n\n"\
        "Would you like to check it back in? (Y\\N)\n\n >>"
   selection = gets.chomp.downcase
   selection = valid_selection(selection,["y","yes","n","no"])
   if selection == "y" || selection == "yes"
-    patron.books_checked_out_count -= 1
-    patron.save
-    selected_book.patron_id = nil
-    selected_book.save
-    puts "#{selected_book.title} has been checked in."
+    check_in_book(selected_book, selected_patron)
   else
     #Go back to selected_book_record
   end
 end
 
-
+# Checks in a book with database save
+#
+# + selected_book: a Book object as selected by the user
+# + selected_patron: a Patron object as selected by the user
+#
+# Returns nil
+def check_in_book(selected_book, selected_patron)
+  selected_patron.books_checked_out_count -= 1
+  selected_patron.save
+  selected_book.patron_id = nil
+  selected_book.save
+  puts "#{selected_book.title} has been checked in."
+end
 
 ######################################################
 #### PATRONS PATH ####################################
