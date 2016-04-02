@@ -899,7 +899,6 @@ def edit_patron_name(selected_patron)
   patron_updated(saved, selected_patron)
 end
 
-
 # Checks if save is true or false, if false show errors with record
 #
 # + saved: a boolean representing whether the record saved to database or not
@@ -917,6 +916,18 @@ def patron_updated(saved, selected_patron)
     end
   end
 end
+
+# Check in or out a book from the patron's path
+#
+# +selected_patron: a Patron object as selected by the user
+#
+#
+def check_in_out_book_from_patron(selected_patron)
+end
+
+#######################################################
+########## VALID SELECTIONS AND RECORD EXISTANCE ######
+#######################################################
 
 # Checks to see if a users selection is within the acceptable choices
 #

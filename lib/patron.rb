@@ -10,13 +10,16 @@ class Patron < ActiveRecord::Base
 
   has_many :books
 
-  # Creates a string representing a books attributes
+  # Creates a string representing a patron attributes
   #
   # Returns the created string
   def record_display
     "#{id}. Name: #{name}\n   Email: #{email}"
   end
 
+  # Creates a string representing the patron attibutes to edit
   def record_edit_display
     "1. Name: #{name}\n2. Email: #{email}\n"
+  end
+
 end
