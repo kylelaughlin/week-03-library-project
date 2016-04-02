@@ -838,18 +838,72 @@ def selected_patron_record(selected_patron)
     puts selected_patron.record_display
     print "\nPlease select one of the following:\n\n1. Edit Record\n"\
           "2. Check in/out\n"\
-          "Back. Go back to Show all libraries\n\n >>"
+          "Back. Go back to show all patrons\n\n >>"
     selection = gets.chomp.downcase
     selection = valid_selection(selection, ["1","2","back"])
     case selection
     when "1"
-      edit_book_record(selected_book)
+      edit_patron_record(selected_patron)
     when "2"
-      check_in_out_book(selected_book)
+      check_in_out_book_from_patron(selected_patron)
     when "back"
       #go back to staff members index
     else
       puts "Something broke - selected book record selection"
+    end
+  end
+end
+
+def edit_patron_record(selected_patron)
+  selection = ""
+  while selection != "back"
+    puts "\n\n   --- Edit #{selected_patron.name} ---\n\n"
+    print "What would you like to edit?\n"
+    print "#{selected_patron.record_edit_display}\nBack. Go back to selected patron\n >>"
+    selection = gets.chomp.downcase
+    selection = valid_selection(selection, ["1","2","back"])
+    case selection
+    when "1"
+      edit_patron_name(selected_patron)
+    when "2"
+      edit_patron_email(selected_patron)
+    when "back"
+      #go back to selected_patron_record
+    else
+      puts "Something broke - patron edit record selection"
+    end
+  end
+end
+
+# Change the patron's name
+#
+# + selected_patron: a Patron object which was selected by the user
+#
+#
+def edit_patron_name(selected_patron)
+  print "New name: >>"
+  name = gets.chomp
+  saved = selected_patron.update_attributes(name: name)
+  name_updated(saved, selected_patron)
+end
+
+
+
+
+# Checks if save is true or false, if false show errors with record
+#
+# + saved: a boolean representing whether the record saved to database or not
+# + selected_patron: a Patron object which was selected by the user
+#
+# Returns nil
+def patron_updated(saved, selected_patron)
+  if saved
+    puts "\nPatron Updated:"
+    puts selected_patron.record_display
+  else
+    puts "\nPatron not updated!\n"
+    selected_patron.errors.messages.each do |k,v|
+      puts "#{k} #{v}\n"
     end
   end
 end
