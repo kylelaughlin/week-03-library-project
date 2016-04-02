@@ -940,16 +940,66 @@ def check_in_out_book_from_patron(selected_patron)
 end
 
 # Check out a book if patron has fewer than 3 books already checked out
+#
+# + selected_patron: A Patron object as selected by the user
+#
+# Returns nil
 def check_out_book_from_patron(selected_patron)
   selected_patron.books_checked_out_count += 1
   if selected_patron.save
-    select_book_for_patron(selected_patron)
+    selected_book = select_book_for_patron(selected_patron)
+    selected_book.patron = selected_patron
+    selected_book.save
   else
     puts "\nPatron unable to check out a book.\n"
     selected_patron.errors.messages.each do |k,v|
       puts "#{v}\n"
     end
   end
+end
+
+# Select a book to check out
+#
+# + selected_patron: A Patron object as selected by the user
+#
+# Returns book object to be checked out
+def select_book_for_patron(selected_patron)
+  #display available books
+  puts "Available books:"
+  Book.where(patron_id = nil).each do |b|
+    puts b.record_display
+  end
+  print "\nPlease select a book from above\n\n >>"
+  selected_book_id = gets.chomp.to_i
+  selected_book_id = valid_book_selection(selected_book_id)
+  selected_book = Book.find_by_id(selected_book_id)
+end
+
+# Checks if a selected book is not already checked out
+#
+# + selected_book_id: an integer representing the id of the book to be checked out
+#
+# Returns a boolean value true if the book is indeed available to be checked out, false if not
+def valid_available_book(selected_book_id)
+  available_books = Books.where(patron_id: nil)
+  available = false
+  available_books.eahc do |b|
+    available = true if b.id == selected_book_id
+  end
+  available
+end
+
+# If selected book is not an available book then prompts for a new selection.
+#
+# + selected_book_id: an integer representing the id or the selectd book
+#
+# Returns an acceptable book id
+def valid_book_selection(selected_book_id)
+  while valid_available_book(selected_book_id)
+    print "That is an invalid selection. Please select from the books above.\n\n >>"
+    selected_book_id = gets.chomp.to_i
+  end
+  selected_book_id
 end
 
 #######################################################
