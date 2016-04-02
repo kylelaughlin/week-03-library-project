@@ -15,13 +15,13 @@ class Patron < ActiveRecord::Base
   #
   # Returns the created string
   def record_display
-    "#{id}. Name: #{name}\n   Email: #{email}\n   Books: #{checked_out_books}"
+    "#{id}. Name: #{name}\n   Email: #{email}\n   Books: #{checked_out_books_display}"
   end
 
   # Builds a string with all books checked out by a patron at a given time
   #
   # Returns the created string
-  def checked_out_books
+  def checked_out_books_display
     string = ""
     Book.where(patron_id: id).each do |b|
       string += "#{b.title}\n          "
@@ -31,6 +31,15 @@ class Patron < ActiveRecord::Base
     end
     string
   end
+
+  def checked_out_books_select
+    string = ""
+    Book.where(patron_id: selected_patron_id).each do |b|
+      string += "#{b.id}. #{b.title}\n"
+    end
+    string
+  end
+
 
   # Creates a string representing the patron attibutes to edit
   def record_edit_display

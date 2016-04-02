@@ -940,6 +940,55 @@ def check_in_out_book_from_patron(selected_patron)
   end
 end
 
+def check_in_book_from_patron(selected_patron)
+  if !Book.where(patron_id: selected_patron.id).empty?
+    selected_book = select_patrons_book_to_return(selected_patron)
+    selected_patron.books_checked_out_count -= 1
+    selected_patron.save
+    selected_book.patron_id = nil
+    selected_book.save
+    puts "#{selected_book.title} has now been checked in."
+  else
+    puts "#{selected_patron.name} has no books to return."
+end
+
+# Gets user input to select a book to returns
+#
+# + selected_patron: a Patron object as selected by the user
+#
+# Returns a book object in which to return
+def select_patrons_book_to_return(selected_patron)
+  puts "#{selected_patron.name}: Books Checked Out-"
+  puts selected_patron.checked_out_books_select
+  print "\n Please select a book from above to return\n\n >>"
+  selected_book_id = gets.chomp.to_i
+  selected_book_id = check_book_selection_validity(selected_patron, selected_book_id)
+  selected_book = Book.find_by_id(selected_book_id)
+end
+
+# Prompts the user for a new selection if the book is not one checked out by the patron
+#
+# + selected_patron: a Patron object of which the user selected
+# + selected_book_id: an integer representing the selected book
+#
+# returns an integer representing a valid book id
+def check_book_selection_validity(selected_patron, selected_book_id)
+  while !valid_patrons_book(selected_patron.id, selected_book_id)
+    print "That is not a valid book to return, Please select from the books above\n\n >>"
+    selected_book_id = gets.chomp.to_i
+  end
+  selected_book_id
+end
+
+def valid_patrons_book(selected_patron_id,selected_book_id)
+  valid_books = Book.where(patron_id: selected_patron_id)
+  acceptable = false
+  valid_books.each do |b|
+    acceptable = true if b.id == selected_book_id
+  end
+  acceptable
+end
+
 # Check out a book if patron has fewer than 3 books already checked out
 #
 # + selected_patron: A Patron object as selected by the user
@@ -974,6 +1023,7 @@ def select_book_for_patron(selected_patron)
   selected_book_id = gets.chomp.to_i
   selected_book_id = valid_book_selection(selected_book_id)
   selected_book = Book.find_by_id(selected_book_id)
+
 end
 
 # Checks if a selected book is not already checked out
