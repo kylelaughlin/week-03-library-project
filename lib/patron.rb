@@ -6,7 +6,7 @@ class Patron < ActiveRecord::Base
 
   validates :name, presence: true
   validates :email, presence: true, uniqueness: true
-  validates :books_checked_out_count, numericality: {less_than_or_equal_to: 3}
+  validates :books_checked_out_count, numericality: {less_than_or_equal_to: 3, message: "Patron can not have more than three books checked out at any given time."}
 
   has_many :books
 

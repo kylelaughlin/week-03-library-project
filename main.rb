@@ -923,7 +923,7 @@ end
 #
 #
 def check_in_out_book_from_patron(selected_patron)
-  print "Would patron #{selected_patron.name} like to:\n1. Check out a book\n"\
+  print "\nWould patron #{selected_patron.name} like to:\n1. Check out a book\n"\
        "2. Return a book\nBack. Go back to #{selected_patron.name} options\n\n >>"
   selection = gets.chomp.downcase
   selection = valid_selection(selection,["1","2","back"])
@@ -939,7 +939,18 @@ def check_in_out_book_from_patron(selected_patron)
   end
 end
 
+# Check out a book if patron has fewer than 3 books already checked out
 def check_out_book_from_patron(selected_patron)
+  selected_patron.books_checked_out_count += 1
+  if selected_patron.save
+    select_book_for_patron(selected_patron)
+  else
+    puts "\nPatron unable to check out a book.\n"
+    selected_patron.errors.messages.each do |k,v|
+      puts "#{v}\n"
+    end
+  end
+end
 
 #######################################################
 ########## VALID SELECTIONS AND RECORD EXISTANCE ######
