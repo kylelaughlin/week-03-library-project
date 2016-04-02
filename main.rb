@@ -855,6 +855,11 @@ def selected_patron_record(selected_patron)
   end
 end
 
+# Edit Patron record options menu
+#
+# + selected_patron: a Patron object as selected by the user
+#
+# Returns nil
 def edit_patron_record(selected_patron)
   selection = ""
   while selection != "back"
