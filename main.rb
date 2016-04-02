@@ -252,6 +252,7 @@ end
 #   + Show all staff members
 #   + Back to Main Menu
 #
+# Returns nil
 def staff_members_menu
   selection = ""
   while selection != "back"
@@ -295,7 +296,7 @@ end
 # + name: a string representing the new staff members name
 # + email: a string representing the new staff memners email
 #
-#
+# Returns nil
 def save_new_staff_member(name, email)
   new_staff_member = StaffMember.new(name: name, email: email)
   saved = new_staff_member.save
@@ -315,7 +316,7 @@ end
 #
 # +new_staff_member: a staff member object
 #
-#
+# Returns nil
 def assign_to_library(new_staff_member)
   puts "\nPlease select one of the following libraries for the new staff member:"
   Library.all.each do |l|
@@ -333,6 +334,7 @@ end
 
 # Staff Member Index: Shows all staff members and their infomation to select
 #
+# Returns nil
 def staff_members_index
   selection = ""
   while selection != "back"
@@ -358,6 +360,11 @@ def staff_members_index
   end
 end
 
+# Selected Staff member menu options - prompt for valid selection
+#
+# + selected_staff_member: A StaffMember object as selected by the user
+#
+# Returns nil
 def selected_staff_member_record(selected_staff_member)
   selection = ""
   while selection != "back"
@@ -410,7 +417,7 @@ end
 #
 # + selected_staff_member: a StaffMember object which was selected by the user
 #
-#
+# Calls method
 def edit_staff_member_name(selected_staff_member)
   print "New name: >>"
   name = gets.chomp
@@ -422,7 +429,7 @@ end
 #
 # + selected_staff_member: a StaffMember object which was selected by the user
 #
-#
+# Calls method
 def edit_staff_member_email(selected_staff_member)
   print "New name: >>"
   email = gets.chomp
@@ -430,6 +437,11 @@ def edit_staff_member_email(selected_staff_member)
   staff_member_updated(saved, selected_staff_member)
 end
 
+# Change the staff members library
+#
+# + selected_staff_member: a StaffMember object as selected by the user
+#
+# Calls method
 def edit_staff_member_library(selected_staff_member)
   puts "Available libraries:"
   Library.all.each do |l|
@@ -448,7 +460,7 @@ end
 # + saved: a boolean representing whether the record saved to database or not
 # + selected_staff_member: a StaffMember object which was selected by the user
 #
-#
+# Returns nil
 def staff_member_updated(saved, selected_staff_member)
   if saved
     puts "\nStaff Member Updated:"
