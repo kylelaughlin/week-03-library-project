@@ -6,7 +6,8 @@ class Patron < ActiveRecord::Base
 
   validates :name, presence: true
   validates :email, presence: true, uniqueness: true
-  validates :books_checked_out_count, numericality: {less_than_or_equal_to: 3, message: "Patron can not have more than three books checked out at any given time."}
+  validates :books_checked_out_count, numericality: {less_than_or_equal_to: 3,
+    message: "Patron can not have more than three books checked out at any given time."}
 
   has_many :books
 
@@ -14,7 +15,21 @@ class Patron < ActiveRecord::Base
   #
   # Returns the created string
   def record_display
-    "#{id}. Name: #{name}\n   Email: #{email}"
+    "#{id}. Name: #{name}\n   Email: #{email}\n   Books: #{checked_out_books}"
+  end
+
+  # Builds a string with all books checked out by a patron at a given time
+  #
+  # Returns the created string
+  def checked_out_books
+    string = ""
+    Book.where(patron_id: id).each do |b|
+      string += "#{b.title}\n          "
+    end
+    if string.empty?
+      string = "None"
+    end
+    string
   end
 
   # Creates a string representing the patron attibutes to edit

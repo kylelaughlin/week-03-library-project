@@ -731,6 +731,7 @@ def check_in_book(selected_book)
   selection = valid_selection(selection,["y","yes","n","no"])
   if selection == "y" || selection == "yes"
     patron.books_checked_out_count -= 1
+    patron.save
     selected_book.patron_id = nil
     selected_book.save
     puts "#{selected_book.title} has been checked in."
@@ -965,11 +966,11 @@ end
 # Returns book object to be checked out
 def select_book_for_patron(selected_patron)
   #display available books
-  puts "Available books:"
-  Book.where(patron_id = nil).each do |b|
+  puts "\n\nAvailable books:"
+  Book.where(patron_id: nil).each do |b|
     puts b.record_display
   end
-  print "\nPlease select a book from above\n\n >>"
+  print "\nPlease select a book from above to check out\n\n >>"
   selected_book_id = gets.chomp.to_i
   selected_book_id = valid_book_selection(selected_book_id)
   selected_book = Book.find_by_id(selected_book_id)
@@ -981,9 +982,9 @@ end
 #
 # Returns a boolean value true if the book is indeed available to be checked out, false if not
 def valid_available_book(selected_book_id)
-  available_books = Books.where(patron_id: nil)
+  available_books = Book.where(patron_id: nil)
   available = false
-  available_books.eahc do |b|
+  available_books.each do |b|
     available = true if b.id == selected_book_id
   end
   available
@@ -995,7 +996,7 @@ end
 #
 # Returns an acceptable book id
 def valid_book_selection(selected_book_id)
-  while valid_available_book(selected_book_id)
+  while !valid_available_book(selected_book_id)
     print "That is an invalid selection. Please select from the books above.\n\n >>"
     selected_book_id = gets.chomp.to_i
   end
