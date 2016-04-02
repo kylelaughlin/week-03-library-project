@@ -750,6 +750,7 @@ end
 #   + Show all patrons
 #   + Back to Main Menu
 #
+# Returns nil
 def patrons_menu
   selection = ""
   while selection != "back"
@@ -792,6 +793,7 @@ end
 # + name: string representing the name of the new patron
 # + email: string representing the email of the new patron
 #
+# Returns nil
 def save_new_patron(name, email)
   new_patron = Patron.new(name: name, email: email, books_checked_out_count: 0)
   saved = new_patron.save
@@ -808,6 +810,7 @@ end
 
 # Patrons Index: Shows all patrons and their infomation Select option
 #
+# Returns nil
 def patrons_index
   selection = ""
   while selection != "back"
@@ -832,6 +835,11 @@ def patrons_index
   end
 end
 
+# Menu options for a selected patron
+#
+# + selected_patron: a Patron object as selected by the user
+#
+# Returns nil
 def selected_patron_record(selected_patron)
   selection = ""
   while selection != "back"
