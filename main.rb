@@ -469,6 +469,7 @@ end
 #   + Show all books
 #   + Back to Main Menu
 #
+# Returns nil
 def books_menu
   selection = ""
   while selection != "back"
@@ -552,6 +553,7 @@ end
 
 # Books Index: Shows all books and their infomation select an option
 #
+# Returns nil
 def books_index
   selection = ""
   while selection != "back"
@@ -576,6 +578,11 @@ def books_index
   end
 end
 
+# Selected book record menu options
+#
+# +selected_book: a Book object as selected by the user
+#
+# Returns nil
 def selected_book_record(selected_book)
   selection = ""
   while selection != "back"
@@ -599,6 +606,11 @@ def selected_book_record(selected_book)
   end
 end
 
+# Edit book menu options
+#
+# + selected_book: a Book object as selected by the user
+#
+# Returns nil
 def edit_book_record(selected_book)
   selection = ""
   while selection != "back"
@@ -696,6 +708,9 @@ def check_in_out_book(selected_book)
   end
 end
 
+# Select valid patron to check out a selected book
+#
+# + selected_book: A book object as selected by the user
 def select_patron_to_check_out(selected_book)
   puts "\n\n   --- Checkout #{selected_book.title} ---\n\n"
   puts "Patrons:\n\n"
@@ -714,6 +729,12 @@ def select_patron_to_check_out(selected_book)
   end
 end
 
+#Checks out a book with database updates
+#
+# +patron: a Patron object
+# + selected_book: a Book object as selected by the user
+#
+# Returns nil
 def check_out_book(patron, selected_book)
   patron.books_checked_out_count += 1
   selected_book.patron = patron
