@@ -25,6 +25,17 @@ class StaffMember < ActiveRecord::Base
     string
   end
 
+  # Creates a string representing a staff members libraries to select
+  #
+  # Returns a string of all libraries a staff member has
+  def libraries_remove_display
+    string = ""
+    self.library.each do |l|
+      string += "#{l.id}. #{l.branch_name}\n"
+    end
+    string
+  end
+
   # Creates a string representing a Staff Member's attributes to be selected from
   #
   # Returns the created string

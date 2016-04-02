@@ -476,16 +476,24 @@ end
 #
 # Calls method
 def add_library_to_staff_member(selected_staff_member)
-  puts "Available libraries:"
-  Library.where.not(id: selected_staff_member.libraries_id_array).each do |l|
-    puts l.record_display
+  if Library.where.not(id: selected_staff_member.libraries_id_array).empty?
+    puts "#{selected_staff_member.name} is already associated with all libraries."
+  else
+    puts "Available libraries:"
+    Library.where.not(id: selected_staff_member.libraries_id_array).each do |l|
+      puts l.record_display
+    end
+    print "Select new library.\n\n >>"
+    new_library_id = gets.chomp.to_i
+    new_library_id = valid_library(new_library_id)
+    selected_staff_member.library = Library.find_by_id(new_library_id)
+    saved = selected_staff_member.save
+    staff_member_updated(saved, selected_staff_member)
   end
-  print "Select new library.\n\n >>"
-  new_library_id = gets.chomp.to_i
-  new_library_id = valid_library(new_library_id)
-  selected_staff_member.library = Library.find_by_id(new_library_id)
-  saved = selected_staff_member.save
-  staff_member_updated(saved, selected_staff_member)
+end
+
+def remove_library_from_staff_member(selected_staff_member)
+
 end
 
 # Checks if save is true or false, if false show errors with record
