@@ -13,6 +13,8 @@ require_relative "./lib/patron.rb"
 #   staff members
 #   books
 #   patrons
+#
+# Returns nil
 def main_menu
   selection = ""
   while selection != "exit"
@@ -51,6 +53,8 @@ end
 #   Show all libraries
 #   Create new library
 #   Back to Main Menue
+#
+# Returns nil
 def libraries_menu
   selection = ""
   while selection != "back"
@@ -75,6 +79,8 @@ end
 
 # Create a new library
 # Prompts for library information - calls another method to save and validate
+#
+# Calls method
 def library_new
   puts "\n\n   --- Add New Library ---\n\n"
   print "Please fill in all requested information.\n\nWhat is the name of the new library?\n"\
@@ -112,6 +118,8 @@ end
 
 # Displays all the libraries and attributes
 # Can select between selecting a record to view/modify and going back to libraries menu
+#
+# Returns nil
 def libraries_index
   selection = ""
   while selection != "back"
@@ -194,7 +202,7 @@ end
 #
 # + selected_lbrary: a library object which was selected by the user
 #
-#
+# Calls method
 def edit_library_branch_name(selected_library)
   print "New branch name: >>"
   branch_name = gets.chomp
@@ -206,7 +214,7 @@ end
 #
 # + selected_lbrary: a library object which was selected by the user
 #
-#
+# Calls method
 def edit_library_address(selected_library)
   print "New address: >>"
   address = gets.chomp
@@ -218,7 +226,7 @@ end
 #
 # + selected_lbrary: a library object which was selected by the user
 #
-#
+# Calls method
 def edit_library_phone_number(selected_library)
   print "New phone number: >>"
   phone_number = gets.chomp
@@ -231,7 +239,7 @@ end
 # + saved: a boolean representing whether the record saved to database or not
 # + selected_lbrary: a library object which was selected by the user
 #
-#
+# Returns nil
 def library_updated(saved, selected_library)
   if saved
     puts "\nLibrary Updated:"
