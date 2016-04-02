@@ -917,13 +917,29 @@ def patron_updated(saved, selected_patron)
   end
 end
 
-# Check in or out a book from the patron's path
+# Select if patron wants to check out a book or return a book
 #
 # +selected_patron: a Patron object as selected by the user
 #
 #
 def check_in_out_book_from_patron(selected_patron)
+  print "Would patron #{selected_patron.name} like to:\n1. Check out a book\n"\
+       "2. Return a book\nBack. Go back to #{selected_patron.name} options\n\n >>"
+  selection = gets.chomp.downcase
+  selection = valid_selection(selection,["1","2","back"])
+  case selection
+  when "1"
+    check_out_book_from_patron(selected_patron)
+  when "2"
+    check_in_book_from_patron(selected_patron)
+  when "back"
+    #Go back to selected patron record menu
+  else
+    puts "Something broke - check-in-out-book-from-patron selection"
+  end
 end
+
+def check_out_book_from_patron(selected_patron)
 
 #######################################################
 ########## VALID SELECTIONS AND RECORD EXISTANCE ######
