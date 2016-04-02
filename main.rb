@@ -583,7 +583,8 @@ def books_index
       puts b.record_display
     end
 
-    print "\nPlease select one of the following options:\n\n1. Select a book to view or edit\nBack. Go back to Books Menu\n\n >>"
+    print "\nPlease select one of the following options:\n\n"\
+          "1. Select a book to view or edit\nBack. Go back to Books Menu\n\n >>"
     selection = gets.chomp.downcase
     selection = valid_selection(selection,["1","back"])
     case selection
@@ -874,7 +875,8 @@ def patrons_index
       puts pn.record_display
     end
 
-    print "\nPlease select one of the following options:\n1. Select a patron\nBack. Go back to Books Menu\n\n >>"
+    print "\nPlease select one of the following options:\n"\
+          "1. Select a patron\nBack. Go back to Books Menu\n\n >>"
     selection = gets.chomp.downcase
     selection = valid_selection(selection,["1","back"])
     case selection
@@ -1213,5 +1215,4 @@ def valid_patron(selected_patron_id)
   selected_patron_id
 end
 
-binding.pry
 main_menu
