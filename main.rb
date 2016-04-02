@@ -940,6 +940,11 @@ def check_in_out_book_from_patron(selected_patron)
   end
 end
 
+# Check in book - updates to the database after clearing Checks
+#
+# + selected_patron: a Patron object as selected by the user
+#
+# Returns nil
 def check_in_book_from_patron(selected_patron)
   if !Book.where(patron_id: selected_patron.id).empty?
     selected_book = select_patrons_book_to_return(selected_patron)
@@ -1089,6 +1094,11 @@ def valid_selection(selection, acceptable_choices)
   selection
 end
 
+# Reprompts the user for a valid library selection
+#
+# + selected_library_id: an integer representing the id of the selected library
+#
+# Returns an integer representing a valid library id
 def valid_library(selected_library_id)
   while Library.find_by_id(selected_library_id).nil?
     print "That is not a valid selection. Please select from the libraries above.\n\n >>"
@@ -1097,6 +1107,11 @@ def valid_library(selected_library_id)
   selected_library_id
 end
 
+# Re-prompts the user for a valid staff member id
+#
+# + selected_staff_member_id: an integer representing the selected staff members id
+#
+# Returns an integer representing a valid staff member id
 def valid_staff_member(selected_staff_member_id)
   while StaffMember.find_by_id(selected_staff_member_id).nil?
     print "That is not a valid selection. Please select from the staff members above.\n\n >>"
@@ -1105,6 +1120,11 @@ def valid_staff_member(selected_staff_member_id)
   selected_staff_member_id
 end
 
+# Re-prompts the user for a valid book id
+#
+# + selected_book_id: an integer representing the selected books id
+#
+# Returns an integer representing a valid book id
 def valid_book(selected_book_id)
   while Book.find_by_id(selected_book_id).nil?
     print "That is not a valid selection. Please select from the books above.\n\n >>"
@@ -1113,6 +1133,11 @@ def valid_book(selected_book_id)
   selected_book_id
 end
 
+# Re-prompts the user for a valid patron id
+#
+# + selected_patron_id: an integer representing the selected patrons id
+#
+# Returns an integer representing a valid patron id
 def valid_patron(selected_patron_id)
   while Patron.find_by_id(selected_patron_id).nil?
     print "That is not a valid selection. Please select from the patrons above.\n\n"
