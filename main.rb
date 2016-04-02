@@ -486,8 +486,10 @@ def add_library_to_staff_member(selected_staff_member)
     end
     print "Select new library.\n\n >>"
     new_library_id = gets.chomp.to_i
-    new_library_id = valid_library(new_library_id)
-    selected_staff_member.library = Library.find_by_id(new_library_id)
+    new_library_id = valid_library_selection(new_library_id,
+                Library.where.not(id: selected_staff_member.libraries_id_array))
+    new_library = Library.find_by_id(new_library_id)
+    selected_staff_member.library << new_library
     saved = selected_staff_member.save
     staff_member_updated(saved, selected_staff_member)
   end
@@ -504,12 +506,20 @@ def select_remove_library_from_staff_member(selected_staff_member)
   else
     puts "Libraries:\n"
     puts selected_staff_member.libraries_remove_display
-    puts "\nSelect a library from above to remove\n\n >>"
+    print "\nSelect a library from above to remove\n\n >>"
     library_id = gets.chomp.to_i
-    library_id = valid_selection(library_id,selected_staff_member.libraries_id_array)
+    library_id = valid_library_selection(library_id,selected_staff_member.library)
     selected_library = Library.find_by_id(library_id)
     remove_library(selected_staff_member,selected_library)
   end
+end
+
+def valid_library_selection(library_id,acceptable_choices)
+  while !acceptable_choices.include? Library.find_by_id(library_id)
+    print "That was an invalid selection. Please select form the libraries above.\n\n >>"
+    library_id = gets.chomp.to_i
+  end
+  library_id
 end
 
 # Deletes the association between the selected staff member and the selected library_id
