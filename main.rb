@@ -950,6 +950,7 @@ def check_in_book_from_patron(selected_patron)
     puts "#{selected_book.title} has now been checked in."
   else
     puts "#{selected_patron.name} has no books to return."
+  end
 end
 
 # Gets user input to select a book to returns
@@ -980,6 +981,12 @@ def check_book_selection_validity(selected_patron, selected_book_id)
   selected_book_id
 end
 
+# Checks to see if a selection represents a book checked out by the selected patron
+#
+# + selected_patron_id: an integer representing the id for the selected patron
+# + selected_book_id: an integer representing the id for the selected book
+#
+# Returns a boolean representing if the book is currently checked out by the patron
 def valid_patrons_book(selected_patron_id,selected_book_id)
   valid_books = Book.where(patron_id: selected_patron_id)
   acceptable = false
@@ -989,12 +996,25 @@ def valid_patrons_book(selected_patron_id,selected_book_id)
   acceptable
 end
 
+# Checks if there any books to check out
+#
+# + selected_patron: a Patron object as selected by the user
+#
+# Returns nil
+def check_out_book_from_patron(selected_patron)
+  if Book.where(patron_id: nil).empty?
+    puts "All books have been checked out"
+  else
+    check_out_book_from_acceptable_patron(selected_patron)
+  end
+end
+
 # Check out a book if patron has fewer than 3 books already checked out
 #
 # + selected_patron: A Patron object as selected by the user
 #
 # Returns nil
-def check_out_book_from_patron(selected_patron)
+def check_out_book_from_acceptable_patron(selected_patron)
   selected_patron.books_checked_out_count += 1
   if selected_patron.save
     selected_book = select_book_for_patron(selected_patron)

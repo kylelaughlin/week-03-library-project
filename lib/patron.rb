@@ -34,7 +34,7 @@ class Patron < ActiveRecord::Base
 
   def checked_out_books_select
     string = ""
-    Book.where(patron_id: selected_patron_id).each do |b|
+    Book.where(patron_id: id).each do |b|
       string += "#{b.id}. #{b.title}\n"
     end
     string
