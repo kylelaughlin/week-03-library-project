@@ -884,10 +884,20 @@ def edit_patron_name(selected_patron)
   print "New name: >>"
   name = gets.chomp
   saved = selected_patron.update_attributes(name: name)
-  name_updated(saved, selected_patron)
+  patron_updated(saved, selected_patron)
 end
 
-
+# Change the patron's email
+#
+# + selected_patron: a Patron object which was selected by the user
+#
+#
+def edit_patron_name(selected_patron)
+  print "New email: >>"
+  email = gets.chomp
+  saved = selected_patron.update_attributes(email: email)
+  patron_updated(saved, selected_patron)
+end
 
 
 # Checks if save is true or false, if false show errors with record
