@@ -462,7 +462,7 @@ def edit_staff_member_library(selected_staff_member)
     when "1"
       add_library_to_staff_member(selected_staff_member)
     when "2"
-      remove_library_from_staff_member(selected_staff_member)
+      select_remove_library_from_staff_member(selected_staff_member)
     when "back"
       #go back to staff member menu
     else
@@ -470,6 +470,7 @@ def edit_staff_member_library(selected_staff_member)
     end
   end
 end
+
 # Change the staff members library
 #
 # + selected_staff_member: a StaffMember object as selected by the user
@@ -492,8 +493,34 @@ def add_library_to_staff_member(selected_staff_member)
   end
 end
 
-def remove_library_from_staff_member(selected_staff_member)
+# Select a library to remove the assocation with the staff member
+#
+# + selected_staff_member: a StaffMember object as selected by the user
+#
+# Returns nil
+def select_remove_library_from_staff_member(selected_staff_member)
+  if selected_staff_member.libraries_id_array.empty?
+    puts "#{selected_staff_member.name} does not belong to any libraries"
+  else
+    puts "Libraries:\n"
+    puts selected_staff_member.libraries_remove_display
+    puts "\nSelect a library from above to remove\n\n >>"
+    library_id = gets.chomp.to_i
+    library_id = valid_selection(library_id,selected_staff_member.libraries_id_array)
+    selected_library = Library.find_by_id(library_id)
+    remove_library(selected_staff_member,selected_library)
+  end
+end
 
+# Deletes the association between the selected staff member and the selected library_id
+#
+# + selected_staff_member: a StaffMember object as selected by the user
+# + selected_library: a Library object as selected by the user
+#
+# Returns nil
+def remove_library(selected_staff_member,selected_library)
+  selected_staff_member.library.delete(selected_library)
+  puts "\nLibrary removed\n"
 end
 
 # Checks if save is true or false, if false show errors with record
