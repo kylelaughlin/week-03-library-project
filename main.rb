@@ -757,7 +757,7 @@ def patrons_menu
     "1.Show all patrons\n"\
     "2. Add new patron\n"\
     "Back. Go back to Main Menu\n\n >>"
-    selection = gets.chomp.to_i
+    selection = gets.chomp.downcase
     selection = valid_selection(selection, ["1","2","back"])
 
     case selection
