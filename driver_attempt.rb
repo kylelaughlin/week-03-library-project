@@ -657,13 +657,13 @@ end
 #
 # Calls method to confirm save or show errors
 def edit_book_library(selected_book, model)
-  puts "Available libraries:"
+  puts "\n\nAvailable libraries:"
   Library.all.each do |l|
     puts l.record_display
   end
-  print "Select new library. >>"
+  print "\nSelect new library.\n\n >>"
   new_library_id = gets.chomp.to_i
-  new_library_id = valid_library(new_library_id)
+  new_library_id = valid_library_selection(new_library_id,Library.all)
   selected_book.library = Library.find_by_id(new_library_id)
   saved = selected_book.save
   record_save_result(saved, selected_book, model)

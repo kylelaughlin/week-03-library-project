@@ -34,5 +34,15 @@ class Book < ActiveRecord::Base
     end
   end
 
+  # Create an array of all libraries ids
+  #
+  # Returns an array with all libraries ids
+  def libraries_id_array
+    ids = []
+    Library.all.each do |l|
+      ids << l.id
+    end
+    ids
+  end
 
 end
