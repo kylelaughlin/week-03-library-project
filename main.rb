@@ -837,7 +837,7 @@ end
 def check_out_book(patron, selected_book)
   patron.books_checked_out_count += 1
   selected_book.patron = patron
-  saved = selected_book.save
+  selected_book.save
   puts "\n\n#{selected_book.title} is now checked out by #{patron.name}"
 end
 
@@ -1116,7 +1116,7 @@ def select_patrons_book_to_return(selected_patron)
   print "\n Please select a book from above to return\n\n >>"
   selected_book_id = gets.chomp.to_i
   selected_book_id = check_book_selection_validity(selected_patron, selected_book_id)
-  selected_book = Book.find_by_id(selected_book_id)
+  Book.find_by_id(selected_book_id)
 end
 
 # Prompts the user for a new selection if the book is not one checked out by the patron
