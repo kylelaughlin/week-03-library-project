@@ -25,7 +25,7 @@ def main_menu
     "Exit. Close Application\n\n >>"
     selection = gets.chomp.downcase
     #call valid_selection method - (users selection, array of acceptable choices)
-    selection = valid_selection(selection,["1","2","3","4","exit"])
+    selection = valid_selection(selection,[1,2,3,4,"exit"])
     case selection
     when "1"
       model = "library"
@@ -54,9 +54,9 @@ def sub_menu(model)
     puts "\n\n   ---- #{model.split("_").join(" ").capitalize} Menu ----\n\n"
     print "Options:\n1. Show #{model.split("_").join(" ")} index\n"\
          "2. New #{model.split("_").join(" ")}\n"\
-         "0. Go back to main menu\n\n >>"
+         "Back. Go back to main menu\n\n >>"
     selection = gets.chomp.downcase
-    selection = valid_selection(selection,["1","2","back"])
+    selection = valid_selection(selection,[1,2,"back"])
     case selection
     when "1"
       record_index(model)
@@ -73,11 +73,12 @@ end
 def record_index(model)
   puts "\n\n   ---- #{model.split("_").join(" ").capitalize} Index ----\n\n"
   display_index(model)
+  selection = ""
   while selection != "back"
     print "\n\nPlease select a #{model.split("_").join(" ")} from above"\
           " or type 'back' to return to #{model.split("_").join(" ").pluralize} menu.\n\n >>"
     selection = gets.chomp.downcase
-    selection = valid_selection(selection.to_i,all_record_ids(model))
+    selection = valid_selection(selection,all_record_ids(model))
     case
     when "back"
       #go back to sub menu
@@ -104,8 +105,21 @@ def all_record_ids(model)
 end
 
 def selected_record(model, record_id)
-
-
+  puts "\n\n   ---- Selected #{model.split("_").join(" ")} ----\n\n"
+  puts model.camelize.constantize.record_display
+  print "\nPlease select one of the following options:\n1. Edit\nBack. "\
+       "Go back to #{model.split("_").join(" ").pluralize} index\n\n >>"
+  selection = gets.chomp.downcase
+  selection = valid_selection(selection,[1])
+  case selection
+  when "1"
+    edit_record
+  when "back"
+    #Go back to index
+  else
+    puts "something broke - selected record options"
+  end
+end
 # Checks to see if a users selection is within the acceptable choices
 #
 # + selection: an integer representing the users selection
@@ -113,7 +127,7 @@ def selected_record(model, record_id)
 #
 # Returns a string representing the valid user selection
 def valid_selection(selection, acceptable_choices)
-  while !(acceptable_choices.include? selection) && selection != "back"
+  while !(acceptable_choices.include? selection.to_i) && selection != "back" && selection != "exit"
     print "That is an invalid selection please select an option from above.\n\n >>"
     selection = gets.chomp
   end
