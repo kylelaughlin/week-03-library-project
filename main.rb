@@ -1294,4 +1294,5 @@ def valid_patron(selected_patron_id)
   selected_patron_id
 end
 
+binding.pry
 main_menu
