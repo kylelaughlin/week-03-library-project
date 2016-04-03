@@ -782,10 +782,10 @@ end
 def book_updated(saved, selected_book)
   if saved
     puts "\nBook Updated:"
-    puts selected_staff_member.record_display
+    puts selected_book.record_display
   else
     puts "\nBook not updated!\n"
-    selected_staff_member.errors.messages.each do |k,v|
+    selected_book.errors.messages.each do |k,v|
       puts "#{k} #{v}\n"
     end
   end
@@ -1169,7 +1169,7 @@ end
 def check_out_book_from_acceptable_patron(selected_patron)
   selected_patron.books_checked_out_count += 1
   if selected_patron.save
-    selected_book = select_book_for_patron(selected_patron)
+    selected_book = select_book_for_patron
     selected_book.patron = selected_patron
     selected_book.save
   else
@@ -1185,7 +1185,7 @@ end
 # + selected_patron: A Patron object as selected by the user
 #
 # Returns book object to be checked out
-def select_book_for_patron(selected_patron)
+def select_book_for_patron
   #display available books
   puts "\n\nAvailable books:"
   Book.where(patron_id: nil).each do |b|
@@ -1195,7 +1195,6 @@ def select_book_for_patron(selected_patron)
   selected_book_id = gets.chomp.to_i
   selected_book_id = valid_book_selection(selected_book_id)
   selected_book = Book.find_by_id(selected_book_id)
-
 end
 
 # Checks if a selected book is not already checked out
