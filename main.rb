@@ -1194,7 +1194,7 @@ def select_book_for_patron
   print "\nPlease select a book from above to check out\n\n >>"
   selected_book_id = gets.chomp.to_i
   selected_book_id = valid_book_selection(selected_book_id)
-  selected_book = Book.find_by_id(selected_book_id)
+  Book.find_by_id(selected_book_id)
 end
 
 # Checks if a selected book is not already checked out
