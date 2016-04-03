@@ -672,6 +672,7 @@ end
 # Edit Patron record options menu
 #
 # + selected_patron: a Patron object as selected by the user
+# + model: a string representing the object type as selecrted by the user
 #
 # Returns nil
 def edit_patron_record(selected_patron, model)
@@ -681,12 +682,14 @@ def edit_patron_record(selected_patron, model)
     print "What would you like to edit?\n"
     print "#{selected_patron.record_edit_display}\nBack. Go back to selected patron\n >>"
     selection = gets.chomp.downcase
-    selection = valid_selection(selection, [1,2])
+    selection = valid_selection(selection, [1,2,3])
     case selection
     when "1"
-      edit_patron_name(selected_patron)
+      edit_patron_name(selected_patron, model)
     when "2"
-      edit_patron_email(selected_patron)
+      edit_patron_email(selected_patron, model)
+    when "3"
+      check_in_or_out_patron(selected_patron, model)
     when "back"
       #go back to selected_patron_record
     else
@@ -698,25 +701,27 @@ end
 # Change the patron's name
 #
 # + selected_patron: a Patron object which was selected by the user
+# + model: a string representing the object type as selected by the user
 #
 # Calls method
-def edit_patron_name(selected_patron)
+def edit_patron_name(selected_patron, model)
   print "New name: >>"
   name = gets.chomp
   saved = selected_patron.update_attributes(name: name)
-  patron_updated(saved, selected_patron)
+  record_save_result(saved, selected_patron, model)
 end
 
 # Change the patron's email
 #
 # + selected_patron: a Patron object which was selected by the user
+# + model: a string representing the object type as selected by the user
 #
 # Calls method
-def edit_patron_email(selected_patron)
+def edit_patron_email(selected_patron, model)
   print "New email: >>"
   email = gets.chomp
   saved = selected_patron.update_attributes(email: email)
-  patron_updated(saved, selected_patron)
+  record_save_result(saved, selected_patron, model)
 end
 
 # Checks if save is true or false, if false show errors with record

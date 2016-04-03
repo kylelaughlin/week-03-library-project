@@ -44,7 +44,7 @@ class Patron < ActiveRecord::Base
 
   # Creates a string representing the patron attibutes to edit
   def record_edit_display
-    "1. Name: #{name}\n2. Email: #{email}\n"
+    "1. Name: #{name}\n2. Email: #{email}\n3. Check in/out"
   end
 
 end
