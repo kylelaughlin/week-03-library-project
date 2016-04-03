@@ -560,24 +560,10 @@ def select_remove_library_from_staff_member(selected_staff_member)
     puts selected_staff_member.libraries_remove_display
     print "\nSelect a library from above to remove\n\n >>"
     library_id = gets.chomp.to_i
-    library_id = valid_library_selection(library_id,selected_staff_member.library)
+    library_id = valid_object_selection(library_id,selected_staff_member.library)
     selected_library = Library.find_by_id(library_id)
     remove_library(selected_staff_member,selected_library)
   end
-end
-
-# Re-prompt user for a new library selection if library is not in the acceptable choices
-#
-# +library_id: an integer representing the users selected library
-# +acceptable_choices: an array of library objects that the user can select from
-#
-# Returns an integer representing the library the user selecrted
-def valid_library_selection(library_id,acceptable_choices)
-  while !acceptable_choices.include? Library.find_by_id(library_id)
-    print "That was an invalid selection. Please select form the libraries above.\n\n >>"
-    library_id = gets.chomp.to_i
-  end
-  library_id
 end
 
 # Deletes the association between the selected staff member and the selected library_id
@@ -606,7 +592,7 @@ def edit_book_record(selected_book, model)
     print "What would you like to edit?\n"
     print "#{selected_book.record_edit_display}\nBack. Go back to selected book\n >>"
     selection = gets.chomp.downcase
-    selection = valid_selection(selection, [1,2,3,4])
+    selection = valid_selection(selection, [1,2,3,4,5])
     case selection
     when "1"
       edit_book_title(selected_book, model)
@@ -616,6 +602,8 @@ def edit_book_record(selected_book, model)
       edit_book_isbn(selected_book, model)
     when "4"
       edit_book_library(selected_book, model)
+    when "5"
+      check_in_or_out_book(selected_book, model)
     when "back"
       #go back to selected_book_record
     else
@@ -663,30 +651,127 @@ def edit_book_library(selected_book, model)
   end
   print "\nSelect new library.\n\n >>"
   new_library_id = gets.chomp.to_i
-  new_library_id = valid_library_selection(new_library_id,Library.all)
+  new_library_id = valid_object_selection(new_library_id,Library.all)
   selected_book.library = Library.find_by_id(new_library_id)
   saved = selected_book.save
   record_save_result(saved, selected_book, model)
 end
 
+def check_in_or_out_book(selected_book, model)
+  if selected_book.patron_id.nil?
+    check_out(selected_book, nil, model)
+  else
+    check_in_book(selected_book)
+  end
+end
 
-# Checks if save is true or false, if false show errors with record
+
+
+#=========== Check in and out ===========================
+
+def check_in_book(selected_book)
+  print "#{selected_book.title} is checked out by #{selected_book.patron.name}.\n"\
+       "Would you like to check it in? (Y\\N)\n >>"
+  selection = gets.chomp.downcase
+  selection = valid_string_selection(selection,["y","yes","n","no"])
+  case selection
+  when "y","yes"
+    check_in_book_association(selected_book)
+  when "n","no","back","exit"
+    #Go back to edit book
+  else
+    puts "something strange happened - check_in_book"
+  end
+end
+
+# Modify relationships between books and patron_id
 #
-# + saved: a boolean representing whether the record saved to database or not
-# + selected_staff_member: a StaffMember object which was selected by the user
+# + selected_book: a Book object as selected by the user
+#
+# Returns true or false depending on if the record saved
+def check_in_book_association(selected_book)
+  selected_patron = Patron.find_by_id(selected_book.patron_id)
+  selected_patron.books_checked_out_count -= 1
+  selected_patron.save
+  selected_book.patron_id = nil
+  selected_book.save
+end
+
+# Check out a book with a valid book and patron_id
+#
+# +selected_book: a Book object
+# + selected_patron: a Patron object
 #
 # Returns nil
-def book_updated(saved, selected_book)
+def check_out(selected_book, selected_patron, model)
+  if selected_book.nil?
+    selected_book = select_book_to_check_out(model)
+  end
+  if selected_patron.nil?
+    selected_Patron = select_patron_to_check_out(model)
+  end
+  check_out_associations(selected_book, selected_patron)
+end
+
+# Creates the asscoations between the book and patorn objects
+#
+# +selected_book: a Book object
+# + selected_patron: a Patron object
+#
+# Returns nil
+def check_out_associations(selected_book, selected_patron)
+  selected_book.patron = selected_patron
   if saved
-    puts "\nBook Updated:"
-    puts selected_book.record_display
+    selected_patron.books_checked_out_count += 1
+    puts "#{selected_book.title} is now checked out by #{selected_patron.name}.\n"
   else
-    puts "\nBook not updated!\n"
+    puts "\n#{selected_book.title} not checked out!\n"
     selected_book.errors.messages.each do |k,v|
       puts "#{k} #{v}\n"
     end
   end
 end
+
+# Select a book to be checked out
+#
+# Returns a Book object to be checked out
+def select_book_to_check_out(model)
+  #display available books
+  puts "\n\nAvailable books:"
+  Book.where(patron_id: nil).each do |b|
+    puts b.record_display
+  end
+  print "\nPlease select a book from above to check out\n\n >>"
+  selected_book_id = gets.chomp.to_i
+  selected_book_id = valid_object_selection(selected_book_id,Book.where(patron_id: nil), model)
+  Book.find_by_id(selected_book_id)
+end
+
+# Select a valid patron to check out a book
+#
+# Returns a valid Patron object
+def select_patron_to_check_out(model)
+  acceptable = false
+  while !acceptable
+    puts "Select a patron:\n\n"
+    Patron.all.each do |patron|
+      puts patron.record_display
+    end
+    print "\nPlease select a patron above to check out this book\n\n >>"
+    selected_patron_id = gets.chomp.to_i
+    selected_patron_id = valid_object_selection(selected_patron_id,Patron.all, model)
+    patron = Patron.find_by_id(selected_patron_id)
+    if patron.books_checked_out_count < 3
+      check_out_book(patron,selected_book)
+      accetpable = true
+    else
+      puts "\n#{patron.name} has three books already checked out.\n"\
+           "Must return a book before checking out another.\n\n"
+    end
+  end
+  patron
+end
+
 
 #=========== SELECTION VALIDATION HELPER METHODS =========
 
@@ -702,6 +787,35 @@ def valid_selection(selection, acceptable_choices)
     selection = gets.chomp
   end
   selection
+end
+
+# Checks to see if a users selection is within the acceptable choices
+#
+# + selection: an integer representing the users selection
+# + acceptable_choices: an array of choices that are valid given the options provided
+#
+# Returns a string representing the valid user selection
+def valid_string_selection(selection, acceptable_choices)
+  while !(acceptable_choices.include? selection) && selection != "back" && selection != "exit"
+    print "That is an invalid selection please select an option from above.\n\n >>"
+    selection = gets.chomp
+  end
+  selection
+end
+
+
+# Re-prompt user for a new object id selection if object is not in the acceptable choices
+#
+# +object_id: an integer representing the id for a user selected object
+# +acceptable_choices: an array of objects that the user can select from
+#
+# Returns an integer representing the id for the object the user selecrted
+def valid_object_selection(object_id,acceptable_choices, model)
+  while !acceptable_choices.include? model.camelize.constantize.find_by_id(object_id)
+    print "That was an invalid selection. Please select form the list above.\n\n >>"
+    object_id = gets.chomp.to_i
+  end
+  object_id
 end
 
 # Confirms if the new record is saved, shows errors if not saved

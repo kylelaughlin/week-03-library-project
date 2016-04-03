@@ -14,10 +14,16 @@ class Book < ActiveRecord::Base
   def record_display
     string = "#{id}. Title: #{title}\n   Author: #{author}\n   ISBN: #{isbn}\n"
     if library.nil?
-      string += "   Library: None"
+      string += "   Library: None\n"
     else
-      string += "   Library: #{library.branch_name}"
+      string += "   Library: #{library.branch_name}\n"
     end
+    if patron.nil?
+      string += "   Checked Out: Available"
+    else
+      string += "   Checked Out: #{patron.name}"
+    end
+    string
   end
 
   # Create a string representing a books attributes formatted for edit selection
@@ -28,21 +34,12 @@ class Book < ActiveRecord::Base
              "2. Author: #{author}\n"\
              "3. ISBN: #{isbn}\n"
     if library.nil?
-      string += "4. Library: None"
+      string += "4. Library: None\n"
     else
-      string += "4. Library: #{library.branch_name}"
+      string += "4. Library: #{library.branch_name}\n"
     end
+    string += "5. Check in/out"
   end
 
-  # Create an array of all libraries ids
-  #
-  # Returns an array with all libraries ids
-  def libraries_id_array
-    ids = []
-    Library.all.each do |l|
-      ids << l.id
-    end
-    ids
-  end
 
 end
