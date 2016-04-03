@@ -58,8 +58,8 @@ def sub_menu(model)
   while selection != "back"
     puts "\n\n   ---- #{model.split("_").join(" ").capitalize} Menu ----\n\n"
     print "Options:\n1. Show #{model.split("_").join(" ")} index\n"\
-         "2. New #{model.split("_").join(" ")}\n"\
-         "Back. Go back to main menu\n\n >>"
+    "2. New #{model.split("_").join(" ")}\n"\
+    "Back. Go back to main menu\n\n >>"
     selection = gets.chomp.downcase
     selection = valid_selection(selection,[1,2,"back"])
     case selection
@@ -84,7 +84,7 @@ def record_index(model)
   puts "\n\n   ---- #{model.split("_").join(" ").capitalize} Index ----\n\n"
   display_index(model)
   print "\n\nPlease select a #{model.split("_").join(" ")} from above"\
-        " or type 'back' to return to #{model.split("_").join(" ").pluralize} menu.\n\n >>"
+  " or type 'back' to return to #{model.split("_").join(" ").pluralize} menu.\n\n >>"
   selection = gets.chomp.downcase
   selection = valid_selection(selection,all_record_ids(model))
   case selection
@@ -131,7 +131,7 @@ def selected_record(model, record_id)
     puts "\n\n   ---- Selected #{model.split("_").join(" ")} ----\n\n"
     puts selected_object.record_display
     print "\nPlease select one of the following options:\n1. Edit\nBack. "\
-         "Go back to #{model.split("_").join(" ").pluralize} index\n\n >>"
+    "Go back to #{model.split("_").join(" ").pluralize} index\n\n >>"
     selection = gets.chomp.downcase
     selection = valid_selection(selection,[1])
     case selection
@@ -199,8 +199,8 @@ end
 # Returns nil
 def save_new_library(branch_name, address, phone_number, model)
   new_library = Library.new(branch_name: branch_name,
-                            address: address,
-                            phone_number: phone_number)
+  address: address,
+  phone_number: phone_number)
   saved = new_library.save
   record_save_result(saved, new_library, model)
 end
@@ -494,8 +494,8 @@ def edit_staff_member_library(selected_staff_member, model)
   selection = ""
   while selection != "back"
     print "\n1. Add #{selected_staff_member.name} to another library\n"\
-         "2. Remove #{selected_staff_member.name} from a library\n"\
-         "Back. Go back to the Staff Member menu\n\n >>"
+    "2. Remove #{selected_staff_member.name} from a library\n"\
+    "Back. Go back to the Staff Member menu\n\n >>"
     selection = gets.chomp.downcase
     selection = valid_selection(selection,[1,2])
     case selection
@@ -543,7 +543,7 @@ def select_new_library(selected_staff_member)
   print "Select new library.\n\n >>"
   new_library_id = gets.chomp.to_i
   new_library_id = valid_library_selection(new_library_id,
-                    Library.where.not(id: selected_staff_member.libraries_id_array))
+  Library.where.not(id: selected_staff_member.libraries_id_array))
   Library.find_by_id(new_library_id)
 end
 
@@ -593,7 +593,98 @@ end
 
 #=========== EDIT BOOK =========================
 
+# Edit book menu options
+#
+# + selected_book: a Book object as selected by the user
+# + model: a string representing the object type being utilized
+#
+# Returns nil
+def edit_book_record(selected_book, model)
+  selection = ""
+  while selection != "back"
+    puts "\n\n   --- Edit #{selected_book.title} ---\n\n"
+    print "What would you like to edit?\n"
+    print "#{selected_book.record_edit_display}\nBack. Go back to selected book\n >>"
+    selection = gets.chomp.downcase
+    selection = valid_selection(selection, [1,2,3])
+    case selection
+    when "1"
+      edit_book_title(selected_book, model)
+    when "2"
+      edit_book_author(selected_book, model)
+    when "3"
+      edit_book_isbn(selected_book, model)
+    when "back"
+      #go back to selected_book_record
+    else
+      puts "Something broke - book edit record selection"
+    end
+  end
+end
 
+# Change the book title
+#
+# + selected_book: a Book object which was selected by the user
+# + model: a string representing the object type being utilized
+#
+# Calls method to confirm save or show errors
+def edit_book_title(selected_book, model)
+  print "New title: >>"
+  title = gets.chomp
+  saved = selected_book.update_attributes(title: title)
+  record_save_result(saved, selected_book, model)
+end
+
+# Change the book author
+#
+# + selected_book: a Book object which was selected by the user
+# + model: a string representing the object type being utilized
+#
+# Calls method to confirm save or show errors
+def edit_book_author(selected_book, model)
+  print "New author: >>"
+  author = gets.chomp
+  saved = selected_book.update_attributes(author: author)
+  record_save_result(saved, selected_book, model)
+end
+
+# Change the home library of the book_updated
+#
+# + selected_book: a Book object which was selected by the user
+# + model: a string representing the object type being utilized
+#
+# Calls method to confirm save or show errors
+def edit_book_library(selected_book, model)
+  puts "Available libraries:"
+  Library.all.each do |l|
+    puts l.record_display
+  end
+  print "Select new library. >>"
+  new_library_id = gets.chomp.to_i
+  new_library_id = valid_library(new_library_id)
+  selected_book.library = Library.find_by_id(new_library_id)
+  saved = selected_book.save
+  record_save_result(saved, selected_book, model)
+end
+
+
+# Checks if save is true or false, if false show errors with record
+#
+# + saved: a boolean representing whether the record saved to database or not
+# + selected_staff_member: a StaffMember object which was selected by the user
+#
+# Returns nil
+def book_updated(saved, selected_book)
+  if saved
+    puts "\nBook Updated:"
+    puts selected_book.record_display
+  else
+    puts "\nBook not updated!\n"
+    selected_book.errors.messages.each do |k,v|
+      puts "#{k} #{v}\n"
+    end
+  end
+end
 
 #=========== SELECTION VALIDATION HELPER METHODS =========
 
