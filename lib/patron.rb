@@ -1,6 +1,7 @@
 # Patron represents a person who utilizes a libraries services
 # + name: the name of the patron (string)
 # + email: the email of the patron (string)
+# + books_checked_out_count: the number of books a patron has checked out at any given time
 
 class Patron < ActiveRecord::Base
 
