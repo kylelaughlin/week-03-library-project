@@ -22,7 +22,7 @@ def main_menu
     "2. Staff Members\n"\
     "3. Books\n"\
     "4. Patrons\n"\
-    "Exit. Close Application\n >>"
+    "Exit. Close Application\n\n >>"
     selection = gets.chomp.downcase
     #call valid_selection method - (users selection, array of acceptable choices)
     selection = valid_selection(selection,["1","2","3","4","exit"])
@@ -52,9 +52,9 @@ def sub_menu(model)
   selection = ""
   while selection != "back"
     puts "\n\n   ---- #{model.split("_").join(" ").capitalize} Menu ----\n\n"
-    puts "Options:\n1. Show #{model.split("_").join(" ")} index\n"\
+    print "Options:\n1. Show #{model.split("_").join(" ")} index\n"\
          "2. New #{model.split("_").join(" ")}\n"\
-         "Back. Go back to main menu"
+         "Back. Go back to main menu\n\n >>"
     selection = gets.chomp.downcase
     selection = valid_selection(selection,["1","2","back"])
     case selection
