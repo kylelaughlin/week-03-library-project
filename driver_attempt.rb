@@ -61,7 +61,7 @@ def sub_menu(model)
     when "1"
       record_index(model)
     when "2"
-      #new record
+      new_record_director(model)
     when "back"
       #Go back to main Menue
     else
@@ -134,7 +134,7 @@ end
 # + model: a string representing the type of records being worked with
 #
 # Returns nil
-def new_recrod_director(model)
+def new_record_director(model)
   case model
   when "lirary"
     new_library_record(model)
@@ -213,32 +213,44 @@ def save_new_staff_member(name, email, model)
   new_staff_member = StaffMember.new(name: name, email: email)
   saved = new_staff_member.save
   record_save_result(saved, new_staff_member, model)
-  assign_to_library(new_staff_member) if saved
-end
-
-# Assign a new staff member to a home library
-#
-# +new_staff_member: a staff member object
-#
-# Returns nil
-def assign_to_library(new_staff_member)
-  puts "\nPlease select one of the following libraries for the new staff member:"
-  Library.all.each do |l|
-    puts l.record_display
-  end
-  puts "\n >>"
-  selection = gets.chomp.to_i
-  while Library.find_by_id(selection).nil?
-    print "That is not a valid selection. Please select from the libraries above.\n\n >>"
-    selection = gets.chomp.to_i
-  end
-  new_staff_member.library = Library.find_by_id(selection)
-  puts "\n#{new_staff_member.name} is now assigned to #{new_staff_member.library.branch_name}"
+  assign_record_to_library(new_staff_member, model) if saved
 end
 
 #========= NEW BOOK ===========
 
+# Gathers info for a new book record
+#
+# + model: a string representing the type of record to be created
+#
+# Calls save_new_book method to save and validate new book record
+def new_book_record(model)
+  puts "\n\n   --- Add New Book ---\n\n"
+  print "Please fill in all requested information.\n\n"\
+  "What is the title of the book?\n\n >>"
+  title = gets.chomp
+  print "\nWho is the author of the book?\n\n >>"
+  author = gets.chomp
+  print "What is the ISBN of the book?\n\n >>"
+  isbn = gets.chomp
+  save_new_book(title, author, isbn, model)
+end
 
+# Saves new book record, if valid. if not valid shows errorrs
+#
+# + title: string representing the title of the new book
+# + author: string representing the author of the new book
+# + isbn: string representing the ISBN number of the new book
+# + model: a string representing the type of record being created
+#
+# Returns nil
+def save_new_book(title, author, isbn, model)
+  new_book = Book.new(title: title, author: author, isbn: isbn)
+  saved = new_book.save
+  record_save_result(saved, new_book, model)
+  assign_record_to_library(new_book, model) if saved
+end
+
+#========= NEW PATRON ===========
 
 
 # Confirms if the new record is saved, shows errors if not saved
@@ -257,6 +269,45 @@ def record_save_result(saved, new_object, model)
     new_object.errors.messages.each do |k,v|
       puts "#{k} #{v}\n"
     end
+  end
+end
+
+# Assign a new staff member to a home library
+#
+# +new_staff_member: a staff member object
+#
+# Calls class to create relatinship between object and library
+def assign_record_to_library(new_object, model)
+  puts "\nPlease select one of the following libraries for the new staff member:"
+  Library.all.each do |l|
+    puts l.record_display
+  end
+  print "\n >>"
+  selection = gets.chomp.to_i
+  while Library.find_by_id(selection).nil?
+    print "That is not a valid selection. Please select from the libraries above.\n\n >>"
+    selection = gets.chomp.to_i
+  end
+  selected_library = Library.find_by_id(selection)
+  create_relationship_with_library(new_object, selected_library, model)
+end
+
+# Creates relationship between the new_object and a library
+#
+# + new_object: an object representing the the object to be assigned to a library
+# + selected_library: a Library object to which the new object will be assigned
+# + model: a string representing the type of new_object
+#
+# Returns nil
+def create_relationship_with_library(new_object, selected_library, model)
+  if model == "book"
+    new_object.library = selected_library
+    puts "\n#{new_object.title} is now assigned to #{new_object.library.branch_name}"
+  elsif model == "staff_member"
+    new_object.library << selected_library
+    puts "\n#{new_object.name} is now assigned to a library."
+  else
+    puts "something broke - new record library relationship creation"
   end
 end
 
