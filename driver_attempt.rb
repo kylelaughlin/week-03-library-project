@@ -25,7 +25,7 @@ def main_menu
     "Exit. Close Application\n\n >>"
     selection = gets.chomp.downcase
     #call valid_selection method - (users selection, array of acceptable choices)
-    selection = valid_selection(selection,[1,2,3,4,"exit"])
+    selection = valid_selection(selection,[1,2,3,4])
     case selection
     when "1"
       model = "library"
@@ -83,19 +83,16 @@ end
 def record_index(model)
   puts "\n\n   ---- #{model.split("_").join(" ").capitalize} Index ----\n\n"
   display_index(model)
-  selection = ""
-  while selection != "back"
-    print "\n\nPlease select a #{model.split("_").join(" ")} from above"\
-          " or type 'back' to return to #{model.split("_").join(" ").pluralize} menu.\n\n >>"
-    selection = gets.chomp.downcase
-    selection = valid_selection(selection,all_record_ids(model))
-    case selection
-    when "back"
-      #go back to sub menu
-    else
-      # selection.to_i represents the selected records id
-      selected_record(model, selection.to_i)
-    end
+  print "\n\nPlease select a #{model.split("_").join(" ")} from above"\
+        " or type 'back' to return to #{model.split("_").join(" ").pluralize} menu.\n\n >>"
+  selection = gets.chomp.downcase
+  selection = valid_selection(selection,all_record_ids(model))
+  case selection
+  when "back"
+    #go back to sub menu
+  else
+    # selection.to_i represents the selected records id
+    selected_record(model, selection.to_i)
   end
 end
 
@@ -353,11 +350,11 @@ end
 def edit_record_director(model, selected_object)
   case model
   when "library"
-    edit_library_record(selected_object)
-  when "book"
-    #edit_book_record
+    edit_library_record(selected_object, model)
   when "staff_member"
-    #edit_staff_member_record
+    edit_staff_member_record(selected_object, model)
+  when "book"
+    edit_book_record(selected_object, model)
   when "patron"
     #edit_patron_record
   else
@@ -379,7 +376,7 @@ def edit_library_record(selected_library, model)
     print "What would you like to edit?\n"
     print "#{selected_library.record_edit_display}\nBack. Go back to Selected Library\n >>"
     selection = gets.chomp.downcase
-    selection = valid_selection(selection, ["1","2","3","back"])
+    selection = valid_selection(selection, [1,2,3])
     case selection
     when "1"
       edit_library_branch_name(selected_library, model)
@@ -433,7 +430,168 @@ end
 
 #======== EDIT STAFF MEMBER ==============================
 
+# Select which staff member attribute to change
+#
+# + selected_staff_member: a StaffMember object which was selected by the user
+# + model: a string representing the object type being utilized
+#
+# Returns nil
+def edit_staff_member_record(selected_staff_member, model)
+  selection = ""
+  while selection != "back"
+    puts "\n\n   --- Edit #{selected_staff_member.name} ---\n\n"
+    print "What would you like to edit?\n"
+    print "#{selected_staff_member.record_edit_display}\nBack. Go back to Selected Staff Member\n >>"
+    selection = gets.chomp.downcase
+    selection = valid_selection(selection, [1,2,3])
+    case selection
+    when "1"
+      edit_staff_member_name(selected_staff_member, model)
+    when "2"
+      edit_staff_member_email(selected_staff_member, model)
+    when "3"
+      edit_staff_member_library(selected_staff_member, model)
+    when "back"
+      #go back to selected_library_record
+    else
+      puts "Something broke - Library edit record selection"
+    end
+  end
+end
 
+# Change the staff member name
+#
+# + selected_staff_member: a StaffMember object which was selected by the user
+# + model: a string representing the object type being utilized
+#
+# Calls method
+def edit_staff_member_name(selected_staff_member, model)
+  print "New name: >>"
+  name = gets.chomp
+  saved = selected_staff_member.update_attributes(name: name)
+  record_save_result(saved, selected_staff_member, model)
+end
+
+# Change the staff member name
+#
+# + selected_staff_member: a StaffMember object which was selected by the user
+# + model: a string representing the object type being utilized
+# Calls method
+def edit_staff_member_email(selected_staff_member, model)
+  print "New name: >>"
+  email = gets.chomp
+  saved = selected_staff_member.update_attributes(email: email)
+  record_save_result(saved, selected_staff_member, model)
+end
+
+# Menu to select if a user wants to add or remove a library from staff member
+#
+# + selected_staff_member: a StaffMember object in which a user selected
+# + model: a string representing the object type being utilized
+#
+# Returns nil
+def edit_staff_member_library(selected_staff_member, model)
+  selection = ""
+  while selection != "back"
+    print "\n1. Add #{selected_staff_member.name} to another library\n"\
+         "2. Remove #{selected_staff_member.name} from a library\n"\
+         "Back. Go back to the Staff Member menu\n\n >>"
+    selection = gets.chomp.downcase
+    selection = valid_selection(selection,[1,2])
+    case selection
+    when "1"
+      add_library_to_staff_member(selected_staff_member)
+    when "2"
+      select_remove_library_from_staff_member(selected_staff_member)
+    when "back"
+      #go back to staff member menu
+    else
+      puts "something broke - edit staff member library menu"
+    end
+  end
+end
+
+# Change the staff members library
+#
+# + selected_staff_member: a StaffMember object as selected by the user
+#
+# Calls method
+def add_library_to_staff_member(selected_staff_member)
+  if Library.where.not(id: selected_staff_member.libraries_id_array).empty?
+    puts "#{selected_staff_member.name} is already associated with all libraries."
+  else
+    puts "Available libraries:"
+    Library.where.not(id: selected_staff_member.libraries_id_array).each do |l|
+      puts l.record_display
+    end
+    #Call method to select a Library
+    new_library = select_new_library(selected_staff_member)
+    #Create association between the selected library and the selected Staff Member
+    selected_staff_member.library << new_library
+    #Save record and send to confirmation method
+    saved = selected_staff_member.save
+    record_save_result(saved, selected_staff_member)
+  end
+end
+
+# Select a library to add to staff member's libraries_id_array
+#
+# +selected_staff_member: a StaffMember object as selected by the user
+#
+# Returns a Library object
+def select_new_library(selected_staff_member)
+  print "Select new library.\n\n >>"
+  new_library_id = gets.chomp.to_i
+  new_library_id = valid_library_selection(new_library_id,
+                    Library.where.not(id: selected_staff_member.libraries_id_array))
+  Library.find_by_id(new_library_id)
+end
+
+# Select a library to remove the assocation with the staff member
+#
+# + selected_staff_member: a StaffMember object as selected by the user
+#
+# Returns nil
+def select_remove_library_from_staff_member(selected_staff_member)
+  if selected_staff_member.libraries_id_array.empty?
+    puts "#{selected_staff_member.name} does not belong to any libraries"
+  else
+    puts "Libraries:\n"
+    puts selected_staff_member.libraries_remove_display
+    print "\nSelect a library from above to remove\n\n >>"
+    library_id = gets.chomp.to_i
+    library_id = valid_library_selection(library_id,selected_staff_member.library)
+    selected_library = Library.find_by_id(library_id)
+    remove_library(selected_staff_member,selected_library)
+  end
+end
+
+# Re-prompt user for a new library selection if library is not in the acceptable choices
+#
+# +library_id: an integer representing the users selected library
+# +acceptable_choices: an array of library objects that the user can select from
+#
+# Returns an integer representing the library the user selecrted
+def valid_library_selection(library_id,acceptable_choices)
+  while !acceptable_choices.include? Library.find_by_id(library_id)
+    print "That was an invalid selection. Please select form the libraries above.\n\n >>"
+    library_id = gets.chomp.to_i
+  end
+  library_id
+end
+
+# Deletes the association between the selected staff member and the selected library_id
+#
+# + selected_staff_member: a StaffMember object as selected by the user
+# + selected_library: a Library object as selected by the user
+#
+# Returns nil
+def remove_library(selected_staff_member,selected_library)
+  selected_staff_member.library.delete(selected_library)
+  puts "\nLibrary removed\n"
+end
+
+#=========== EDIT BOOK =========================
 
 
 
