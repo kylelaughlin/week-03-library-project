@@ -49,4 +49,11 @@ class LibraryTest < Minitest::Test
     assert_equal(string, result)
   end
 
+  def test_record_edit_display
+    l = Library.new(branch_name: "East Library", address: "123 East Drive", phone_number: "555-456-7654")
+    result = l.record_edit_display
+    string = "1. Branch Name: East Library\n2. Address: 123 East Drive\n3. Phone Number: 555-456-7654"
+    assert_equal(string, result)
+  end
+
 end
