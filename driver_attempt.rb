@@ -606,7 +606,7 @@ def edit_book_record(selected_book, model)
     print "What would you like to edit?\n"
     print "#{selected_book.record_edit_display}\nBack. Go back to selected book\n >>"
     selection = gets.chomp.downcase
-    selection = valid_selection(selection, [1,2,3])
+    selection = valid_selection(selection, [1,2,3,4])
     case selection
     when "1"
       edit_book_title(selected_book, model)
@@ -614,6 +614,8 @@ def edit_book_record(selected_book, model)
       edit_book_author(selected_book, model)
     when "3"
       edit_book_isbn(selected_book, model)
+    when "4"
+      edit_book_library(selected_book, model)
     when "back"
       #go back to selected_book_record
     else
