@@ -28,7 +28,7 @@ class Patron < ActiveRecord::Base
       string += "#{b.title}\n          "
     end
     if string.empty?
-      string = "None"
+      string = "None\n"
     end
     string
   end

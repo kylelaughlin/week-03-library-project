@@ -59,7 +59,7 @@ def sub_menu(model)
     selection = valid_selection(selection,["1","2","back"])
     case selection
     when "1"
-      #index
+      record_index(model)
     when "2"
       #new record
     when "back"
@@ -70,7 +70,13 @@ def sub_menu(model)
   end
 end
 
-
+def record_index(model)
+  puts "\n\n   ---- #{model.split("_").join(" ").capitalize} Index ----\n\n"
+  puts "#{model.split("_").join(" ").capitalize.pluralize}:"
+  model.camelize.constantize.all.each do |e|
+    puts e.record_display
+  end
+end
 
 # Checks to see if a users selection is within the acceptable choices
 #
@@ -86,4 +92,5 @@ def valid_selection(selection, acceptable_choices)
   selection
 end
 
+binding.pry
 main_menu

@@ -26,7 +26,7 @@ class StaffMember < ActiveRecord::Base
       string += "None"
     else
       self.library.each do |l|
-        string += "#{l.branch_name}\n         "
+        string += "#{l.branch_name}\n            "
       end
     end
     string
