@@ -176,7 +176,7 @@ end
 # + model: a string representing the type of record being created
 #
 # Returns nil
-def save_new_library(branch_name, address, phone_number,model)
+def save_new_library(branch_name, address, phone_number, model)
   new_library = Library.new(branch_name: branch_name,
                             address: address,
                             phone_number: phone_number)
@@ -199,8 +199,47 @@ def new_staff_member_record(model)
   name = gets.chomp
   print "\nWhat is the new staff member's email?\n\n >>"
   email = gets.chomp
-  save_new_staff_member(name, email)
+  save_new_staff_member(name, email, model)
 end
+
+# Saves new staff member to table
+#
+# + name: a string representing the new staff members name
+# + email: a string representing the new staff memners email
+# + model: a string representing the type of record being created
+#
+# Calls method to confirm or reject save
+def save_new_staff_member(name, email, model)
+  new_staff_member = StaffMember.new(name: name, email: email)
+  saved = new_staff_member.save
+  record_save_result(saved, new_staff_member, model)
+  assign_to_library(new_staff_member) if saved
+end
+
+# Assign a new staff member to a home library
+#
+# +new_staff_member: a staff member object
+#
+# Returns nil
+def assign_to_library(new_staff_member)
+  puts "\nPlease select one of the following libraries for the new staff member:"
+  Library.all.each do |l|
+    puts l.record_display
+  end
+  puts "\n >>"
+  selection = gets.chomp.to_i
+  while Library.find_by_id(selection).nil?
+    print "That is not a valid selection. Please select from the libraries above.\n\n >>"
+    selection = gets.chomp.to_i
+  end
+  new_staff_member.library = Library.find_by_id(selection)
+  puts "\n#{new_staff_member.name} is now assigned to #{new_staff_member.library.branch_name}"
+end
+
+#========= NEW BOOK ===========
+
+
+
 
 # Confirms if the new record is saved, shows errors if not saved
 #
