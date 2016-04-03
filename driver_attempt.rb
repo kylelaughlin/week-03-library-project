@@ -28,13 +28,17 @@ def main_menu
     selection = valid_selection(selection,["1","2","3","4","exit"])
     case selection
     when "1"
-      libraries_menu
+      model = "library"
+      sub_menu(model)
     when "2"
-      staff_members_menu
+      model = "staff_member"
+      sub_menu(model)
     when "3"
-      books_menu
+      model = "book"
+      sub_menu(model)
     when "4"
-      patrons_menu
+      model = "patron"
+      sub_menu(model)
     when "exit"
       puts "\n\n Closing Application"
     else
@@ -43,3 +47,43 @@ def main_menu
   end
 
 end
+
+def sub_menu(model)
+  selection = ""
+  while selection != "back"
+    puts "\n\n   ---- #{model.split("_").join(" ").capitalize} Menu ----\n\n"
+    puts "Options:\n1. Show #{model.split("_").join(" ")} index\n"\
+         "2. New #{model.split("_").join(" ")}\n"\
+         "Back. Go back to main menu"
+    selection = gets.chomp.downcase
+    selection = valid_selection(selection,["1","2","back"])
+    case selection
+    when "1"
+      #index
+    when "2"
+      #new record
+    when "back"
+      #Go back to main Menue
+    else
+      puts "somthing broke - sub menu"
+    end
+  end
+end
+
+
+
+# Checks to see if a users selection is within the acceptable choices
+#
+# + selection: an integer representing the users selection
+# + acceptable_choices: an array of choices that are valid given the options provided
+#
+# Returns a string representing the valid user selection
+def valid_selection(selection, acceptable_choices)
+  while !(acceptable_choices.include? selection)
+    print "That is an invalid selection please select an option from above.\n\n >>"
+    selection = gets.chomp
+  end
+  selection
+end
+
+main_menu
