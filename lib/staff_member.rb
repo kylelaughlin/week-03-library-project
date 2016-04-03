@@ -22,8 +22,12 @@ class StaffMember < ActiveRecord::Base
   # Returns the created string
   def libraries_display
     string = ""
-    self.library.each do |l|
-      string += "#{l.branch_name}\n         "
+    if self.library.empty?
+      string += "None"
+    else
+      self.library.each do |l|
+        string += "#{l.branch_name}\n         "
+      end
     end
     string
   end

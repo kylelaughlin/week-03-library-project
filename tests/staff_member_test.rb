@@ -34,8 +34,14 @@ class StaffMemberTest < Minitest::Test
     sm = StaffMember.new(name: "test", email: "email@test.com")
     sm.id = 2
     result = sm.record_display
-    string = "2. Name: test\n   Email: email@test.com"
+    string = "2. Name: test\n   Email: email@test.com\n   Library: None"
     assert_equal(string, result)
   end
 
+  def test_libraries_display
+    sm = StaffMember.new(name: "test", email: "email@test.com")
+    result = sm.libraries_display
+    string = "None"
+    assert_equal(string, result)
+  end
 end
