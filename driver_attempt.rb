@@ -670,13 +670,14 @@ end
 #=========== Check in and out ===========================
 
 def check_in_book(selected_book)
-  print "#{selected_book.title} is checked out by #{selected_book.patron.name}.\n"\
-       "Would you like to check it in? (Y\\N)\n >>"
+  print "\n#{selected_book.title} is checked out by #{selected_book.patron.name}.\n"\
+       "Would you like to check it in? (Y\\N)\n\n >>"
   selection = gets.chomp.downcase
   selection = valid_string_selection(selection,["y","yes","n","no"])
   case selection
   when "y","yes"
     check_in_book_association(selected_book)
+    puts "\n#{selected_book.title} is not checked in.\n\n"
   when "n","no","back","exit"
     #Go back to edit book
   else
