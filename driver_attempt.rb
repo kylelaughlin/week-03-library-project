@@ -708,7 +708,7 @@ def check_out(selected_book, selected_patron, model)
     selected_book = select_book_to_check_out(model)
   end
   if selected_patron.nil?
-    selected_Patron = select_patron_to_check_out(model)
+    selected_patron = select_patron_to_check_out(model)
   end
   check_out_associations(selected_book, selected_patron)
 end
@@ -721,8 +721,11 @@ end
 # Returns nil
 def check_out_associations(selected_book, selected_patron)
   selected_book.patron = selected_patron
+  saved = selected_book.save
   if saved
     selected_patron.books_checked_out_count += 1
+    selected_patron.save
+    binding.pry
     puts "#{selected_book.title} is now checked out by #{selected_patron.name}.\n"
   else
     puts "\n#{selected_book.title} not checked out!\n"
@@ -759,11 +762,10 @@ def select_patron_to_check_out(model)
     end
     print "\nPlease select a patron above to check out this book\n\n >>"
     selected_patron_id = gets.chomp.to_i
-    selected_patron_id = valid_object_selection(selected_patron_id,Patron.all, model)
+    selected_patron_id = valid_object_selection(selected_patron_id,Patron.all, "patron")
     patron = Patron.find_by_id(selected_patron_id)
     if patron.books_checked_out_count < 3
-      check_out_book(patron,selected_book)
-      accetpable = true
+      acceptable = true
     else
       puts "\n#{patron.name} has three books already checked out.\n"\
            "Must return a book before checking out another.\n\n"
