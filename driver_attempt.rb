@@ -54,7 +54,7 @@ def sub_menu(model)
     puts "\n\n   ---- #{model.split("_").join(" ").capitalize} Menu ----\n\n"
     print "Options:\n1. Show #{model.split("_").join(" ")} index\n"\
          "2. New #{model.split("_").join(" ")}\n"\
-         "Back. Go back to main menu\n\n >>"
+         "0. Go back to main menu\n\n >>"
     selection = gets.chomp.downcase
     selection = valid_selection(selection,["1","2","back"])
     case selection
@@ -72,11 +72,39 @@ end
 
 def record_index(model)
   puts "\n\n   ---- #{model.split("_").join(" ").capitalize} Index ----\n\n"
+  display_index(model)
+  while selection != "back"
+    print "\n\nPlease select a #{model.split("_").join(" ")} from above"\
+          " or type 'back' to return to #{model.split("_").join(" ").pluralize} menu.\n\n >>"
+    selection = gets.chomp.downcase
+    selection = valid_selection(selection.to_i,all_record_ids(model))
+    case
+    when "back"
+      #go back to sub menu
+    else
+      # selection.to_i represents the selected records id
+      selected_record(model, selection.to_i)
+    end
+  end
+end
+
+def display_index(model)
   puts "#{model.split("_").join(" ").capitalize.pluralize}:"
   model.camelize.constantize.all.each do |e|
     puts e.record_display
   end
 end
+
+def all_record_ids(model)
+  ids = []
+  model.camelize.constantize.all.each do |e|
+    ids << e.id
+  end
+  ids
+end
+
+def selected_record(model, record_id)
+
 
 # Checks to see if a users selection is within the acceptable choices
 #
@@ -85,7 +113,7 @@ end
 #
 # Returns a string representing the valid user selection
 def valid_selection(selection, acceptable_choices)
-  while !(acceptable_choices.include? selection)
+  while !(acceptable_choices.include? selection) && selection != "back"
     print "That is an invalid selection please select an option from above.\n\n >>"
     selection = gets.chomp
   end

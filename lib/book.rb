@@ -20,4 +20,6 @@ class Book < ActiveRecord::Base
     "2. Author: #{author}\n"\
     "3. ISBN: #{isbn}"
   end
+
+  
 end
