@@ -48,6 +48,11 @@ def main_menu
 
 end
 
+# Sub menu to select actions on a model
+#
+# +model: a string representing the object type to be utilized
+#
+# Returns nil
 def sub_menu(model)
   selection = ""
   while selection != "back"
@@ -70,6 +75,11 @@ def sub_menu(model)
   end
 end
 
+# User selects a record to view
+#
+# + model: a string representing the objects type
+#
+# Returns nil
 def record_index(model)
   puts "\n\n   ---- #{model.split("_").join(" ").capitalize} Index ----\n\n"
   display_index(model)
@@ -79,7 +89,7 @@ def record_index(model)
           " or type 'back' to return to #{model.split("_").join(" ").pluralize} menu.\n\n >>"
     selection = gets.chomp.downcase
     selection = valid_selection(selection,all_record_ids(model))
-    case
+    case selection
     when "back"
       #go back to sub menu
     else
@@ -89,6 +99,11 @@ def record_index(model)
   end
 end
 
+# Formats and displays of all records for a given model type
+#
+# +model: a string representing the object type to be displayed
+#
+# Returns nil
 def display_index(model)
   puts "#{model.split("_").join(" ").capitalize.pluralize}:"
   model.camelize.constantize.all.each do |e|
@@ -96,6 +111,11 @@ def display_index(model)
   end
 end
 
+# Creates an array of all ids for a given table
+#
+# +model: a string representing the table to gather ids from
+#
+# Returns an array of all ids for a given table
 def all_record_ids(model)
   ids = []
   model.camelize.constantize.all.each do |e|
@@ -104,11 +124,15 @@ def all_record_ids(model)
   ids
 end
 
+# User can select to edit or go back from the record selected to veiw
+#
+#
 def selected_record(model, record_id)
+  selected_object = model.camelize.constantize.find_by_id(record_id)
   selection = ""
   while selection != "back"
     puts "\n\n   ---- Selected #{model.split("_").join(" ")} ----\n\n"
-    puts model.camelize.constantize.record_display
+    puts selected_object.record_display
     print "\nPlease select one of the following options:\n1. Edit\nBack. "\
          "Go back to #{model.split("_").join(" ").pluralize} index\n\n >>"
     selection = gets.chomp.downcase
@@ -340,7 +364,7 @@ def create_relationship_with_library(new_object, selected_library, model)
   end
 end
 
-
+#=========== SELECTION VALIDATION HELPER METHODS =========
 
 # Checks to see if a users selection is within the acceptable choices
 #
