@@ -105,21 +105,122 @@ def all_record_ids(model)
 end
 
 def selected_record(model, record_id)
-  puts "\n\n   ---- Selected #{model.split("_").join(" ")} ----\n\n"
-  puts model.camelize.constantize.record_display
-  print "\nPlease select one of the following options:\n1. Edit\nBack. "\
-       "Go back to #{model.split("_").join(" ").pluralize} index\n\n >>"
-  selection = gets.chomp.downcase
-  selection = valid_selection(selection,[1])
-  case selection
-  when "1"
-    edit_record
-  when "back"
-    #Go back to index
-  else
-    puts "something broke - selected record options"
+  selection = ""
+  while selection != "back"
+    puts "\n\n   ---- Selected #{model.split("_").join(" ")} ----\n\n"
+    puts model.camelize.constantize.record_display
+    print "\nPlease select one of the following options:\n1. Edit\nBack. "\
+         "Go back to #{model.split("_").join(" ").pluralize} index\n\n >>"
+    selection = gets.chomp.downcase
+    selection = valid_selection(selection,[1])
+    case selection
+    when "1"
+      edit_record
+    when "back"
+      #Go back to index
+    else
+      puts "something broke - selected record options"
+    end
   end
 end
+
+
+##########################################################
+#### CREATE NEW RECORDS ##################################
+##########################################################
+
+# Directs the user to the appropriate new record interface for a given model
+#
+# + model: a string representing the type of records being worked with
+#
+# Returns nil
+def new_recrod_director(model)
+  case model
+  when "lirary"
+    new_library_record(model)
+  when "staff_member"
+    new_staff_member_record(model)
+  when "book"
+    new_book_record(model)
+  when "patron"
+    new_patron_record(model)
+  else
+    puts "somthing broke - new_record_director"
+  end
+end
+
+#========= NEW LIBRARY ===========
+
+# Prompts for new library information
+#
+# + model: a string representing the type of record being created
+#
+# Calls method
+def new_library_record(model)
+  puts "\n\n   --- Add New Library ---\n\n"
+  print "Please fill in all requested information.\n\nWhat is the name of the new library?\n"\
+  "\n >>"
+  branch_name = gets.chomp
+  print "\nWhat is the address of the new library?\n\n >>"
+  address = gets.chomp
+  print "\nWhat is the phone number of the new library?\n\n >>"
+  phone_number = gets.chomp
+  save_new_library(branch_name, address, phone_number, model)
+end
+
+# Saves the new library record
+#
+# + branch_name: a string representing the name of the new library branch
+# + address: a string representing the address of the new library branch
+# + phone_number: a string representing the phone number of the new library branch
+# + model: a string representing the type of record being created
+#
+# Returns nil
+def save_new_library(branch_name, address, phone_number,model)
+  new_library = Library.new(branch_name: branch_name,
+                            address: address,
+                            phone_number: phone_number)
+  saved = new_library.save
+  record_save_result(saved, new_library, model)
+end
+
+#========= NEW STAFF MEMBER ===========
+
+# Gather for new staff member info
+#
+# + model: a string representing the type of record being created
+#
+# Calls new_staff_member to save and validate record
+def new_staff_member_record(model)
+  puts "\n\n   --- Add New Staff Member ---\n\n"
+  print "Please fill in all requested information.\n\n"\
+  "What is the new staff member's name?\n"\
+  "\n >>"
+  name = gets.chomp
+  print "\nWhat is the new staff member's email?\n\n >>"
+  email = gets.chomp
+  save_new_staff_member(name, email)
+end
+
+# Confirms if the new record is saved, shows errors if not saved
+#
+# + saved: a boolean value representing if the record saved or not
+# + new_object: an object representing the new record being created
+# + model: a string representing the class being utilized
+#
+# Returns nil
+def record_save_result(saved, new_object, model)
+  if saved
+    puts "\n#{model.split("_").join(" ").capitalize} created:"
+    puts new_object.record_display
+  else
+    puts "\n#{model.split("_").join(" ").capitalize} not created!\n"
+    new_object.errors.messages.each do |k,v|
+      puts "#{k} #{v}\n"
+    end
+  end
+end
+
 # Checks to see if a users selection is within the acceptable choices
 #
 # + selection: an integer representing the users selection
