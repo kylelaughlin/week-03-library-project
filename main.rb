@@ -1040,7 +1040,7 @@ end
 # + selected_patron: a Patron object which was selected by the user
 #
 # Calls method
-def edit_patron_name(selected_patron)
+def edit_patron_email(selected_patron)
   print "New email: >>"
   email = gets.chomp
   saved = selected_patron.update_attributes(email: email)
