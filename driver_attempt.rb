@@ -252,6 +252,32 @@ end
 
 #========= NEW PATRON ===========
 
+# Gather information for a new patron record
+#
+# + model: a string representing the type of object to be created
+#
+# Calls save_new_patron to save a validate record
+def new_patron_record(model)
+  puts "\n\n   --- Add New Patron ---\n\n"
+  print "Please fill in all requested information.\n\n"\
+  "What is the patron's name?\n\n >>"
+  name = gets.chomp
+  print "\nWhat is the patron's email?\n\n >>"
+  email = gets.chomp
+  save_new_patron(name, email, model)
+end
+
+# Save and validate the record, don't save and show errors if invalid record
+#
+# + name: string representing the name of the new patron
+# + email: string representing the email of the new patron
+#
+# Calls method to acknowledge the save or show errors if not saved
+def save_new_patron(name, email, model)
+  new_patron = Patron.new(name: name, email: email, books_checked_out_count: 0)
+  saved = new_patron.save
+  record_save_result(saved, new_patron, model)
+end
 
 # Confirms if the new record is saved, shows errors if not saved
 #
@@ -271,6 +297,9 @@ def record_save_result(saved, new_object, model)
     end
   end
 end
+
+#========= NEW RECORD HELPER METHODS ===========
+
 
 # Assign a new staff member to a home library
 #
@@ -310,6 +339,8 @@ def create_relationship_with_library(new_object, selected_library, model)
     puts "something broke - new record library relationship creation"
   end
 end
+
+
 
 # Checks to see if a users selection is within the acceptable choices
 #
