@@ -356,7 +356,7 @@ def edit_record_director(model, selected_object)
   when "book"
     edit_book_record(selected_object, model)
   when "patron"
-    #edit_patron_record
+    edit_patron_record(selected_object, model)
   else
     puts "Something broke - edit record director"
   end
@@ -665,6 +665,77 @@ def check_in_or_out_book(selected_book, model)
   end
 end
 
+#=========== Edit Patron ================================
+
+
+#######################################################################################All patron records need updated.
+# Edit Patron record options menu
+#
+# + selected_patron: a Patron object as selected by the user
+#
+# Returns nil
+def edit_patron_record(selected_patron, model)
+  selection = ""
+  while selection != "back"
+    puts "\n\n   --- Edit #{selected_patron.name} ---\n\n"
+    print "What would you like to edit?\n"
+    print "#{selected_patron.record_edit_display}\nBack. Go back to selected patron\n >>"
+    selection = gets.chomp.downcase
+    selection = valid_selection(selection, [1,2])
+    case selection
+    when "1"
+      edit_patron_name(selected_patron)
+    when "2"
+      edit_patron_email(selected_patron)
+    when "back"
+      #go back to selected_patron_record
+    else
+      puts "Something broke - patron edit record selection"
+    end
+  end
+end
+
+# Change the patron's name
+#
+# + selected_patron: a Patron object which was selected by the user
+#
+# Calls method
+def edit_patron_name(selected_patron)
+  print "New name: >>"
+  name = gets.chomp
+  saved = selected_patron.update_attributes(name: name)
+  patron_updated(saved, selected_patron)
+end
+
+# Change the patron's email
+#
+# + selected_patron: a Patron object which was selected by the user
+#
+# Calls method
+def edit_patron_email(selected_patron)
+  print "New email: >>"
+  email = gets.chomp
+  saved = selected_patron.update_attributes(email: email)
+  patron_updated(saved, selected_patron)
+end
+
+# Checks if save is true or false, if false show errors with record
+#
+# + saved: a boolean representing whether the record saved to database or not
+# + selected_patron: a Patron object which was selected by the user
+#
+# Returns nil
+def patron_updated(saved, selected_patron)
+  if saved
+    puts "\nPatron Updated:"
+    puts selected_patron.record_display
+  else
+    puts "\nPatron not updated!\n"
+    selected_patron.errors.messages.each do |k,v|
+      puts "#{k} #{v}\n"
+    end
+  end
+end
 
 
 #=========== Check in and out ===========================
