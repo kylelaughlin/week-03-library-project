@@ -139,7 +139,7 @@ def selected_record(model, record_id)
     selection = valid_selection(selection,[1])
     case selection
     when "1"
-      edit_record
+      edit_record_director(model, selected_object)
     when "back"
       #Go back to index
     else
@@ -303,24 +303,6 @@ def save_new_patron(name, email, model)
   record_save_result(saved, new_patron, model)
 end
 
-# Confirms if the new record is saved, shows errors if not saved
-#
-# + saved: a boolean value representing if the record saved or not
-# + new_object: an object representing the new record being created
-# + model: a string representing the class being utilized
-#
-# Returns nil
-def record_save_result(saved, new_object, model)
-  if saved
-    puts "\n#{model.split("_").join(" ").capitalize} created:"
-    puts new_object.record_display
-  else
-    puts "\n#{model.split("_").join(" ").capitalize} not created!\n"
-    new_object.errors.messages.each do |k,v|
-      puts "#{k} #{v}\n"
-    end
-  end
-end
 
 #========= NEW RECORD HELPER METHODS ===========
 
@@ -364,6 +346,97 @@ def create_relationship_with_library(new_object, selected_library, model)
   end
 end
 
+###################################################
+#### EDIT RECORD METHODS ##########################
+###################################################
+
+def edit_record_director(model, selected_object)
+  case model
+  when "library"
+    edit_library_record(selected_object)
+  when "book"
+    #edit_book_record
+  when "staff_member"
+    #edit_staff_member_record
+  when "patron"
+    #edit_patron_record
+  else
+    puts "Something broke - edit record director"
+  end
+end
+
+#========== EDIT LIBRARY RECORD =============
+
+# Select which library attribute to change
+#
+# + selected_lbrary: a library object which was selected by the user
+#
+# Returns nil
+def edit_library_record(selected_library, model)
+  selection = ""
+  while selection != "back"
+    puts "\n\n   --- Edit #{selected_library.branch_name} ---\n\n"
+    print "What would you like to edit?\n"
+    print "#{selected_library.record_edit_display}\nBack. Go back to Selected Library\n >>"
+    selection = gets.chomp.downcase
+    selection = valid_selection(selection, ["1","2","3","back"])
+    case selection
+    when "1"
+      edit_library_branch_name(selected_library, model)
+    when "2"
+      edit_library_address(selected_library, model)
+    when "3"
+      edit_library_phone_number(selected_library, model)
+    when "back"
+      #back to selected library record
+    else
+      puts "Something broke - Library edit record selection"
+    end
+  end
+end
+
+# Change the library branch_name
+#
+# + selected_lbrary: a library object which was selected by the user
+#
+# Calls method to confirm save or show errors
+def edit_library_branch_name(selected_library, model)
+  print "New branch name: >>"
+  branch_name = gets.chomp
+  saved = selected_library.update_attributes(branch_name: branch_name)
+  record_save_result(saved, selected_library, model)
+end
+
+# Change the library address
+#
+# + selected_lbrary: a library object which was selected by the user
+#
+# Calls method to confirm save or show errors
+def edit_library_address(selected_library, model)
+  print "New address: >>"
+  address = gets.chomp
+  saved = selected_library.update_attributes(address: address)
+  record_save_result(saved, selected_library, model)
+end
+
+# Change the library phone_number
+#
+# + selected_lbrary: a library object which was selected by the user
+#
+# Calls method to confirm save or show errors
+def edit_library_phone_number(selected_library, model)
+  print "New phone number: >>"
+  phone_number = gets.chomp
+  saved = selected_library.update_attributes(phone_number: phone_number)
+  record_save_result(saved, selected_library, model)
+end
+
+#======== EDIT STAFF MEMBER ==============================
+
+
+
+
+
 #=========== SELECTION VALIDATION HELPER METHODS =========
 
 # Checks to see if a users selection is within the acceptable choices
@@ -378,6 +451,25 @@ def valid_selection(selection, acceptable_choices)
     selection = gets.chomp
   end
   selection
+end
+
+# Confirms if the new record is saved, shows errors if not saved
+#
+# + saved: a boolean value representing if the record saved or not
+# + new_object: an object representing the new record being created
+# + model: a string representing the class being utilized
+#
+# Returns nil
+def record_save_result(saved, new_object, model)
+  if saved
+    puts "\n#{model.split("_").join(" ").capitalize} created/updated:"
+    puts new_object.record_display
+  else
+    puts "\n#{model.split("_").join(" ").capitalize} not created/updated!\n"
+    new_object.errors.messages.each do |k,v|
+      puts "#{k} #{v}\n"
+    end
+  end
 end
 
 binding.pry
