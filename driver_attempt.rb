@@ -770,12 +770,25 @@ end
 
 #=========== Check in and out ===========================
 
-# Remove association between book and patron for a check in
+# Check for books to be returned form the patron
 #
 # + selected_patron: a Patron object as selected by the user
 #
 # Returns nil
 def check_in_patron(selected_patron)
+  if selected_patron.checked_out_books_select.empty?
+    puts "#{selected_patron.name} does not have any books to return"
+  else
+    check_in_patron_associations(selected_patron)
+  end
+end
+
+# Remove association between book and patron for a check in
+#
+# + selected_patron: a Patron object as selected by the user
+#
+# Returns nil
+def check_in_patron_associations(selected_patron)
   selected_book = select_book_for_patron_to_checkin(selected_patron)
   selected_book.patron_id = nil
   saved = selected_book.save
@@ -801,7 +814,7 @@ def select_book_for_patron_to_checkin(selected_patron)
   puts selected_patron.checked_out_books_select
   print "\n Please select a book from above to return\n\n >>"
   selected_book_id = gets.chomp.to_i
-  selected_book_id = valid_object_selection(selected_book_id, Book.where(patron_id: selected_patron.id))
+  selected_book_id = valid_object_selection(selected_book_id, Book.where(patron_id: selected_patron.id), "book")
   Book.find_by_id(selected_book_id)
 end
 
