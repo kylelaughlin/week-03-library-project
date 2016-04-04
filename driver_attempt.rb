@@ -668,7 +668,6 @@ end
 #=========== Edit Patron ================================
 
 
-#######################################################################################All patron records need updated.
 # Edit Patron record options menu
 #
 # + selected_patron: a Patron object as selected by the user
@@ -742,9 +741,75 @@ def patron_updated(saved, selected_patron)
   end
 end
 
+def check_in_or_out_patron(selected_patron, model)
+
+end
+
+# Select if patron wants to check out a book or return a book
+#
+# +selected_patron: a Patron object as selected by the user
+#
+# Returns nil
+def check_in_or_out_patron(selected_patron, model)
+  print "\nWould #{selected_patron.name} like to:\n1. Check out a book\n"\
+       "2. Return a book\nBack. Go back to #{selected_patron.name} options\n\n >>"
+  selection = gets.chomp.downcase
+  selection = valid_selection(selection,[1,2])
+  case selection
+  when "1"
+    check_out(nil, selected_patron, model)
+  when "2"
+    check_in_patron(selected_patron)
+  when "back"
+    #Go back to selected patron record menu
+  else
+    puts "Something broke - check-in-out-book-from-patron selection"
+  end
+end
+
 
 #=========== Check in and out ===========================
 
+# Remove association between book and patron for a check in
+#
+# + selected_patron: a Patron object as selected by the user
+#
+# Returns nil
+def check_in_patron(selected_patron)
+  selected_book = select_book_for_patron_to_checkin(selected_patron)
+  selected_book.patron_id = nil
+  saved = selected_book.save
+  if saved
+    selected_patron.books_checked_out_count -= 1
+    selected_patron.save
+    puts "#{selected_book.title} is checked in.\n"
+  else
+    puts "\n#{selected_book.title} not checked in!\n"
+    selected_book.errors.messages.each do |k,v|
+      puts "#{k} #{v}\n"
+    end
+  end
+end
+
+# Select a Book object belonging to the selected_patron to return
+#
+# + selected_patron: a Patron object as selected by the user
+#
+# Returns a Book object to be checked in
+def select_book_for_patron_to_checkin(selected_patron)
+  puts "#{selected_patron.name}: Books Checked Out-"
+  puts selected_patron.checked_out_books_select
+  print "\n Please select a book from above to return\n\n >>"
+  selected_book_id = gets.chomp.to_i
+  selected_book_id = valid_object_selection(selected_book_id, Book.where(patron_id: selected_patron.id))
+  Book.find_by_id(selected_book_id)
+end
+
+# Confirm that the user wants to check in a book
+#
+# + selected_book: a Book object as selected by the user
+#
+# Returns nil
 def check_in_book(selected_book)
   print "\n#{selected_book.title} is checked out by #{selected_book.patron.name}.\n"\
        "Would you like to check it in? (Y\\N)\n\n >>"
