@@ -880,7 +880,6 @@ def check_out_associations(selected_book, selected_patron)
   if saved
     selected_patron.books_checked_out_count += 1
     selected_patron.save
-    binding.pry
     puts "#{selected_book.title} is now checked out by #{selected_patron.name}.\n"
   else
     puts "\n#{selected_book.title} not checked out!\n"
