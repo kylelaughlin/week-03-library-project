@@ -40,7 +40,7 @@ def main_menu
       model = "patron"
       sub_menu(model)
     when "exit"
-      puts "\n\n Closing Application"
+      puts "\n\n Closing Application\n\n"
     else
       puts "Something broke - Main menu selection"
     end
@@ -157,7 +157,7 @@ end
 # Returns nil
 def new_record_director(model)
   case model
-  when "lirary"
+  when "library"
     new_library_record(model)
   when "staff_member"
     new_staff_member_record(model)
@@ -530,7 +530,7 @@ def add_library_to_staff_member(selected_staff_member)
     selected_staff_member.library << new_library
     #Save record and send to confirmation method
     saved = selected_staff_member.save
-    record_save_result(saved, selected_staff_member)
+    record_save_result(saved, selected_staff_member,"staff_member")
   end
 end
 
@@ -542,8 +542,8 @@ end
 def select_new_library(selected_staff_member)
   print "Select new library.\n\n >>"
   new_library_id = gets.chomp.to_i
-  new_library_id = valid_library_selection(new_library_id,
-  Library.where.not(id: selected_staff_member.libraries_id_array))
+  new_library_id = valid_object_selection(new_library_id,
+          Library.where.not(id: selected_staff_member.libraries_id_array),"library")
   Library.find_by_id(new_library_id)
 end
 
@@ -560,7 +560,7 @@ def select_remove_library_from_staff_member(selected_staff_member)
     puts selected_staff_member.libraries_remove_display
     print "\nSelect a library from above to remove\n\n >>"
     library_id = gets.chomp.to_i
-    library_id = valid_object_selection(library_id,selected_staff_member.library)
+    library_id = valid_object_selection(library_id,selected_staff_member.library, "library")
     selected_library = Library.find_by_id(library_id)
     remove_library(selected_staff_member,selected_library)
   end
@@ -651,7 +651,7 @@ def edit_book_library(selected_book, model)
   end
   print "\nSelect new library.\n\n >>"
   new_library_id = gets.chomp.to_i
-  new_library_id = valid_object_selection(new_library_id,Library.all)
+  new_library_id = valid_object_selection(new_library_id,Library.all,"library")
   selected_book.library = Library.find_by_id(new_library_id)
   saved = selected_book.save
   record_save_result(saved, selected_book, model)
