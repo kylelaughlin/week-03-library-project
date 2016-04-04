@@ -767,7 +767,6 @@ def check_in_or_out_patron(selected_patron, model)
   end
 end
 
-
 #=========== Check in and out ===========================
 
 # Check for books to be returned form the patron
@@ -934,7 +933,6 @@ def select_patron_to_check_out(model)
   patron
 end
 
-
 #=========== SELECTION VALIDATION HELPER METHODS =========
 
 # Checks to see if a users selection is within the acceptable choices
@@ -964,7 +962,6 @@ def valid_string_selection(selection, acceptable_choices)
   end
   selection
 end
-
 
 # Re-prompt user for a new object id selection if object is not in the acceptable choices
 #
@@ -999,5 +996,4 @@ def record_save_result(saved, new_object, model)
   end
 end
 
-binding.pry
 main_menu
