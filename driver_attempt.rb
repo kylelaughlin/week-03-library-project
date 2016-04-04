@@ -901,7 +901,7 @@ def select_book_to_check_out(model)
   end
   print "\nPlease select a book from above to check out\n\n >>"
   selected_book_id = gets.chomp.to_i
-  selected_book_id = valid_object_selection(selected_book_id,Book.where(patron_id: nil), model)
+  selected_book_id = valid_object_selection(selected_book_id,Book.where(patron_id: nil), "book")
   Book.find_by_id(selected_book_id)
 end
 
