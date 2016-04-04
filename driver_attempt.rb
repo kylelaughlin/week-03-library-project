@@ -854,8 +854,9 @@ end
 
 # Check out a book with a valid book and patron_id
 #
-# +selected_book: a Book object
+# + selected_book: a Book object
 # + selected_patron: a Patron object
+# + model: a string representing the model path taken by user
 #
 # Returns nil
 def check_out(selected_book, selected_patron, model)
@@ -870,7 +871,7 @@ end
 
 # Creates the asscoations between the book and patorn objects
 #
-# +selected_book: a Book object
+# + selected_book: a Book object
 # + selected_patron: a Patron object
 #
 # Returns nil
@@ -892,6 +893,8 @@ end
 
 # Select a book to be checked out
 #
+# + model: a string representing the data type of the path taken from user
+#
 # Returns a Book object to be checked out
 def select_book_to_check_out(model)
   #display available books
@@ -906,6 +909,8 @@ def select_book_to_check_out(model)
 end
 
 # Select a valid patron to check out a book
+#
+# + model: a string representing the data type of the path taken from user
 #
 # Returns a valid Patron object
 def select_patron_to_check_out(model)
