@@ -34,7 +34,7 @@ class PatronTest < Minitest::Test
     patron = Patron.new(name: "Frank", email: "email@Frank.com", books_checked_out_count: 0)
     patron.id = 2
     result = patron.record_display
-    string = "2. Name: Frank\n   Email: email@Frank.com\n   Books: None"
+    string = "2. Name: Frank\n   Email: email@Frank.com\n   Books: None\n"
     assert_equal(string, result)
   end
 
