@@ -42,7 +42,8 @@ class BookTest < Minitest::Test
     b = Book.new(title: "The Book of Ruby", author: "Ruby Rails", isbn: "9234567890123")
     b.id = 2
     result = b.record_display
-    string = "2. Title: The Book of Ruby\n   Author: Ruby Rails\n   ISBN: 9234567890123"
+    string = "2. Title: The Book of Ruby\n   Author: Ruby Rails\n   ISBN: 9234567890123\n"\
+             "   Library: None\n   Checked Out: Available"
     assert_equal(string, result)
   end
 
@@ -52,5 +53,5 @@ class BookTest < Minitest::Test
     string = "1. Title: #{b.title}\n2. Author: #{b.author}\n3. ISBN: #{b.isbn}"
     assert_equal(string, result)
   end
-  
+
 end
