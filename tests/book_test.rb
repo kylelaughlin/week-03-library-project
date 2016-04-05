@@ -50,7 +50,7 @@ class BookTest < Minitest::Test
   def test_record_edit_display
     b = Book.new(title: "The Book of Ruby", author: "Ruby Rails", isbn: "9234567890123")
     result = b.record_edit_display
-    string = "1. Title: #{b.title}\n2. Author: #{b.author}\n3. ISBN: #{b.isbn}"
+    string = "1. Title: #{b.title}\n2. Author: #{b.author}\n3. ISBN: #{b.isbn}\n4. Library: None\n5. Check in/out"
     assert_equal(string, result)
   end
 
